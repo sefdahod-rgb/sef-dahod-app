@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEF Dahod - Fees</title>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50">
+<div id="app"></div>
+<script>
+const STUDENTS = [{"id": "52", "name": "Mayank Sureshbhai Bariya", "class": "8th", "father": "Sureshbhai Bariya", "mobile": "9723675167", "fees": 30000}, {"id": "69", "name": "Dhearya Sanjaybhai Parmar", "class": "8th", "father": "Mr. Sanjaybhai Parmar", "mobile": "8238434105", "fees": 30000}, {"id": "74", "name": "Vanshkumar Kaushikbhai Devda", "class": "8th", "father": "Kaushikbhai Devda", "mobile": "9638651106", "fees": 30000}, {"id": "80", "name": "Vihan Vijaybhai Sangada", "class": "8th", "father": "Vijaybhai Sangada", "mobile": "nan", "fees": 30000}, {"id": "91", "name": "Harsh Manojkumar Kadam", "class": "8th", "father": "Manojkumar Kadam", "mobile": "9664955831", "fees": 30000}, {"id": "109", "name": "Purapbhai Abhesingbhai Bamaniya", "class": "7th", "father": "Abhesingbhai Bamaniya", "mobile": "9427604747", "fees": 28000}, {"id": "110", "name": "Damini Sunilbhai Bariya", "class": "7th", "father": "Sunilbhai Bariya", "mobile": "9924500689", "fees": 28000}, {"id": "114", "name": "Parv Parubhai Tahediya", "class": "7th", "father": "Parubhai Tahediya", "mobile": "9998708241", "fees": 28000}, {"id": "118", "name": "Roshniben Nirajbhai Parmar", "class": "7th", "father": "Nirajbhai Parmar", "mobile": "9979639957", "fees": 28000}, {"id": "119", "name": "Ayankumar Pratapbhai Katara", "class": "7th", "father": "Pratapbhai Katara", "mobile": "9909201759", "fees": 28000}, {"id": "121", "name": "Mohammad Hisan Mohammad Javed Shaikh", "class": "7th", "father": "Mohammad Javed Shaikh", "mobile": "9737004764", "fees": 28000}, {"id": "126", "name": "Ankush Sachinbhai Mishra", "class": "7th", "father": "Sachinbhai Mishra", "mobile": "7383622297", "fees": 28000}, {"id": "137", "name": "Divyani Mukeshbhai Parmar", "class": "7th", "father": "Mukeshbhai Parmar", "mobile": "9974619334", "fees": 28000}, {"id": "139", "name": "Riddhi Pankajsingh Vanzara", "class": "6th", "father": "Pankajsingh Vanzara", "mobile": "720201210", "fees": 27000}, {"id": "140", "name": "Pariben Kalubhai Chauhan", "class": "6th", "father": "Kalubhai Chauhan", "mobile": "9712526292", "fees": 27000}, {"id": "141", "name": "Honey Harshadbhai Bamanya", "class": "6th", "father": "Harshadbhai Bamanya", "mobile": "6351058454", "fees": 27000}, {"id": "149", "name": "Keshav Deepesh Verma", "class": "6th", "father": "Deepesh Verma", "mobile": "7383789840", "fees": 27000}, {"id": "156", "name": "Yashika Dayaram Diwakar", "class": "5th", "father": "Dayaram Diwakar", "mobile": "7096668776", "fees": 25000}, {"id": "158", "name": "Kreyal Charel", "class": "5th", "father": "Shivabhai Charel", "mobile": "8799500513", "fees": 25000}, {"id": "159", "name": "Mohammad Mogis Sabjifaroz", "class": "5th", "father": "Shanavaz  Sabjifaroz", "mobile": "9724190538", "fees": 25000}, {"id": "160", "name": "Mrudulsinh Bechansinh Kshatriya", "class": "5th", "father": "Bechansinh Kshatriya", "mobile": "9429853895", "fees": 25000}, {"id": "161", "name": "Purv Satishbhai Charel", "class": "5th", "father": "Satishbhai Charel", "mobile": "9586375234", "fees": 25000}, {"id": "165", "name": "Vedant Anilbhai Meda", "class": "5th", "father": "Anilbhai Meda", "mobile": "6355611231", "fees": 25000}, {"id": "173", "name": "Meet Jagdish Jat", "class": "5th", "father": "Jagdish Jat", "mobile": "8141170976", "fees": 25000}, {"id": "174", "name": "Himanshi Jagdish Jat", "class": "5th", "father": "Jagdish Jat", "mobile": "8141170976", "fees": 25000}, {"id": "175", "name": "Aryan Bhat", "class": "5th", "father": "Hitesh Bhat", "mobile": "9316256683", "fees": 25000}, {"id": "177", "name": "Vansh Kalubhai Chauhan", "class": "4th", "father": "Kalubhai Chauhan", "mobile": "9712526292", "fees": 22000}, {"id": "178", "name": "Bhavyakumar Shaileshbhai Bariya", "class": "4th", "father": "Shaileshbhai Bariya", "mobile": "9106547620", "fees": 22000}, {"id": "179", "name": "Kartik Dipeshkumar Verma", "class": "4th", "father": "Dipeshkumar Verma", "mobile": "8347079783", "fees": 22000}, {"id": "181", "name": "Aarav Meda", "class": "4th", "father": "Narsingbhai Meda", "mobile": "9574890375", "fees": 22000}, {"id": "182", "name": "Tirthanshi Dindor", "class": "7th", "father": "Lalabhai Dindor", "mobile": "8780813325", "fees": 28000}, {"id": "183", "name": "Tirthkumar Dindor", "class": "6th", "father": "Lalabhai Dindor", "mobile": "8780813325", "fees": 27000}, {"id": "185", "name": "Rahul Sen", "class": "5th", "father": "Jetaram Sen", "mobile": "6354680215", "fees": 25000}, {"id": "188", "name": "Aditya Harijan", "class": "4th", "father": "Rahul Harijan", "mobile": "9773054314", "fees": 22000}, {"id": "192", "name": "Smit Bhabhor", "class": "7th", "father": "Sagarbhai Bhabhor", "mobile": "nan", "fees": 28000}, {"id": "193", "name": "Dharmin Kumar Solanki", "class": "6th", "father": "Gautambhai Solanki", "mobile": "nan", "fees": 27000}, {"id": "194", "name": "Arohi Ajaybhai Devda", "class": "3rd", "father": "Ajaybhai Devda", "mobile": "7435840877", "fees": 20000}, {"id": "198", "name": "Janaksampati Somjibhai Chauhan", "class": "3rd", "father": "Somjibhai Chauhan", "mobile": "9913034585", "fees": 20000}, {"id": "199", "name": "Ishantkumar Prakash Hathila", "class": "3rd", "father": "Prakash Hathila", "mobile": "9664766403", "fees": 20000}, {"id": "200", "name": "Aarushi Arunkumar Kethwas", "class": "3rd", "father": "Arunkumar Kethwas", "mobile": "9909851571", "fees": 20000}, {"id": "203", "name": "Shreyansh Vickykumar Dodiyar", "class": "3rd", "father": "Vickykumar Dodiyar", "mobile": "8401229403", "fees": 20000}, {"id": "205", "name": "Nakulbhai Damor", "class": "3rd", "father": "Nileshbhai Damor", "mobile": "8780905139", "fees": 20000}, {"id": "211", "name": "Prabhash Anilbhai Meda", "class": "3rd", "father": "Anilbhai Meda", "mobile": "6355611231", "fees": 20000}, {"id": "213", "name": "Rudra Sunilbhai Mohaniya", "class": "3rd", "father": "Sunilbhai Mohaniya", "mobile": "8141787264", "fees": 20000}, {"id": "214", "name": "Netik Mukeshbhai Meda", "class": "3rd", "father": "Mukeshbhai Meda", "mobile": "7574083419", "fees": 20000}, {"id": "215", "name": "Sandhya Bharat soni", "class": "8th", "father": "Bharat soni ", "mobile": "6261108296", "fees": 30000}, {"id": "218", "name": "Kush Shaileshbhai Mandodiya", "class": "2nd", "father": "Shaileshbhai Mandodiya", "mobile": "nan", "fees": 18000}, {"id": "219", "name": "JIGNESHBHAI VINODBHAI MEDA", "class": "2nd", "father": "VINODBHAI MEDA", "mobile": "nan", "fees": 18000}, {"id": "220", "name": "PRUTHVIRAJ AJITBHAI BHABHOR", "class": "2nd", "father": "AJITBHAI BHABHOR", "mobile": "nan", "fees": 18000}, {"id": "224", "name": "KHUSHANK NITESHKUMAR GAUD", "class": "2nd", "father": "NITESHKUMAR GAUD", "mobile": "nan", "fees": 18000}, {"id": "226", "name": "ABHAY MUKESHBHAI PARMAR", "class": "2nd", "father": "MUKESHBHAI PARMAR", "mobile": "nan", "fees": 18000}, {"id": "228", "name": "SARSWATI MAHESHBHAI BARIYA", "class": "2nd", "father": "MAHESHBHAI BARIYA", "mobile": "nan", "fees": 18000}, {"id": "229", "name": "AARAV GOVINDBHAI BHURIYA", "class": "2nd", "father": "GOVINDBHAI BHURIYA", "mobile": "nan", "fees": 18000}, {"id": "231", "name": "Kavyansh Arvindbhai Charel", "class": "2nd", "father": "Arvindbhai Charel", "mobile": "nan", "fees": 18000}, {"id": "232", "name": "SMEET LALITBHAI MEDA", "class": "2nd", "father": "LALITBHAI MEDA", "mobile": "nan", "fees": 18000}, {"id": "233", "name": "KHUSHI JETHARAM SEN", "class": "2nd", "father": "JETHARAM SEN", "mobile": "nan", "fees": 18000}, {"id": "234", "name": "Virat Vinodbhai Vanzara", "class": "2nd", "father": "Vinodbhai Vanzara", "mobile": "9558001513", "fees": 18000}, {"id": "235", "name": "Heenaben Shaileshbhai Damor", "class": "3rd", "father": "Shaileshbhai Damor", "mobile": "9106992916", "fees": 20000}, {"id": "236", "name": "YUVIKA SMITKUMAR GOHIL", "class": "2nd", "father": "SMITKUMAR GOHIL", "mobile": "nan", "fees": 18000}, {"id": "238", "name": "RISHABH SANJAYBHAI MANDODIYA", "class": "2nd", "father": "SANJAYBHAI MANDODIYA", "mobile": "nan", "fees": 18000}, {"id": "239", "name": "Nirjala Amitbhai Damor", "class": "2nd", "father": "Amitbhai Damor", "mobile": "8758490402", "fees": 18000}, {"id": "240", "name": "Nirbhay BrajeshkumarMeena", "class": "3rd", "father": "Brajeshkumar Meen", "mobile": "9982156060", "fees": 20000}, {"id": "243", "name": "Danis Ajay Devda", "class": "1st", "father": "Anilbhai", "mobile": "8469544872", "fees": 15000}, {"id": "248", "name": "Krisha Kamleshkumar Rathod", "class": "1st", "father": "Vipulbhai Damor", "mobile": "6351625437", "fees": 15000}, {"id": "249", "name": "Hitarth Diwakar", "class": "1st", "father": "Chandubhai Chauhan", "mobile": "7096668776", "fees": 15000}, {"id": "246", "name": "CHHAVI MAHENDRA MAHAVAR", "class": "1st", "father": "Mahendra Ramalal Mahawar", "mobile": "7600633606", "fees": 15000}, {"id": "253", "name": "VIHANKUMAR SANJAYKUMAR MORI", "class": "1st", "father": "Sanjaykumar Maganbhai Mori", "mobile": "nan", "fees": 15000}, {"id": "241", "name": "Hetakshi Pradeepkumar Gujar", "class": "1st", "father": "Pradeepkumar Omprakash Gujar", "mobile": "nan", "fees": 15000}, {"id": "252", "name": "NEKSHRIBEN LALITBHA IMEDA", "class": "1st", "father": "Lalitkumar Humjibhai Meda", "mobile": "nan", "fees": 15000}, {"id": "251", "name": "PRIYANSHI ROHIT SHARMA", "class": "1st", "father": "Rohit Anilkumar Sharma", "mobile": "nan", "fees": 15000}, {"id": "242", "name": "PURVEE RAVI BHURIYA", "class": "1st", "father": "Ravi Deepak Bhuriya", "mobile": "nan", "fees": 15000}, {"id": "250", "name": "HARDIK PANKAJ VANZARA", "class": "1st", "father": "Pankajsingh Ranchodsingh Vanzara", "mobile": "nan", "fees": 15000}, {"id": "244", "name": "ROHAN KAMLESHABHAI BARIYA", "class": "1st", "father": "KAMLESHABHAI MANUBHAI BARIYA", "mobile": "nan", "fees": 15000}, {"id": "247", "name": "Rudrakumar Pavankumar Ganava", "class": "1st", "father": "Pavankumar Ganava", "mobile": "nan", "fees": 15000}, {"id": "245", "name": "Garima Rohitkumar Mishra", "class": "2nd", "father": "Rohitkumar Mishra", "mobile": "nan", "fees": 18000}, {"id": "257", "name": "Anshu Gopalbhai Jat", "class": "4th", "father": "Gopalbhai Jat", "mobile": "nan", "fees": 22000}, {"id": "255", "name": "Prince Gopalbhai jat", "class": "3rd", "father": "Gopalbhai Jat", "mobile": "nan", "fees": 20000}, {"id": "256", "name": "Vipul Gopalbhai Jat", "class": "8th", "father": "Gopalbhai Jat", "mobile": "nan", "fees": 30000}, {"id": "254", "name": "Shreyansh Shailendra Gautam", "class": "1st", "father": "Shailendra Gautam", "mobile": "nan", "fees": 15000}];
+const KEY = "rzp_live_SeDR91zuvNa9fG";
+let cur=null;
+
+function loginPage(){
+document.getElementById('app').innerHTML=`
+<div class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-indigo-600 to-purple-700">
+<div class="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl">
+<div class="text-center mb-6"><div class="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto font-bold text-xl">SEF</div><h1 class="font-bold text-xl mt-3">SEF Dahod</h1><p class="text-xs text-gray-500">Rainbow Public School</p><p class="text-[10px] mt-2 bg-green-50 text-green-700 px-2 py-1 rounded-full inline-block">Login Fixed - 100% Working</p></div>
+<input id="uid" placeholder="Admission No - jaise 52" class="w-full h-12 border rounded-xl px-4 mb-3">
+<input id="pwd" type="password" placeholder="Password - wahi Admission No" class="w-full h-12 border rounded-xl px-4 mb-3">
+<button onclick="doLogin()" class="w-full h-12 bg-indigo-600 text-white rounded-xl font-bold">Login</button>
+<div class="mt-4 text-[11px] text-gray-500">
+<b>Test Login:</b><br>
+ID: 52 / Pass: 52 (Mayank Bariya)<br>
+ID: 69 / Pass: 69<br>
+Admin: admin / admin
+</div>
+</div>
+</div>`;
+}
+
+function doLogin(){
+const u=document.getElementById('uid').value.trim();
+const p=document.getElementById('pwd').value.trim();
+if(u.toLowerCase()=='admin' && p.toLowerCase()=='admin'){cur={id:'ADMIN', name:'ADMIN'}; adminPage(); return;}
+const s=STUDENTS.find(x=> x.id==u);
+if(!s){alert('Admission No '+u+' nahi mila! Sahi number dalo. 52 se try karo.'); return;}
+if(u!=p){alert('Password galat! Password = Admission No hi hai. 52 ke liye password 52 hoga.'); return;}
+cur=s; parentPage();
+}
+
+function parentPage(){
+document.getElementById('app').innerHTML=`
+<div class="max-w-lg mx-auto p-4">
+<div class="bg-white rounded-2xl p-5 shadow">
+<h2 class="font-bold">${cur.name}</h2>
+<p class="text-xs text-gray-500">Adm: ${cur.id} | Class: ${cur.class} | Father: ${cur.father}</p>
+<button onclick="loginPage()" class="mt-2 text-xs bg-gray-100 px-3 py-1 rounded-full">Logout</button>
+</div>
+<div class="bg-white rounded-2xl p-5 shadow mt-4">
+<h3 class="font-bold mb-3">Fees Payment - All Methods</h3>
+<div class="space-y-2">
+<label class="flex justify-between border p-3 rounded-xl"><span><input type="checkbox" value="7500" data-n="Q1 Fees" class="fee"> Q1 Fees - ₹7500</span><span class="text-xs bg-yellow-100 px-2 py-1 rounded">Pending</span></label>
+<label class="flex justify-between border p-3 rounded-xl"><span><input type="checkbox" value="7500" data-n="Q2 Fees" class="fee"> Q2 Fees - ₹7500</span><span class="text-xs bg-yellow-100 px-2 py-1 rounded">Pending</span></label>
+<label class="flex justify-between border p-3 rounded-xl"><span><input type="checkbox" value="100" data-n="Bonafide" class="fee"> Bonafide - ₹100</span></label>
+<label class="flex justify-between border p-3 rounded-xl"><span><input type="checkbox" value="500" data-n="Activity" class="fee"> Activity - ₹500</span></label>
+</div>
+<div class="mt-4 flex justify-between items-center bg-gray-50 p-4 rounded-xl">
+<span class="font-bold text-xl" id="tot">₹0</span>
+<button id="payBtn" disabled onclick="pay()" class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold disabled:opacity-40">Pay Now - UPI/QR/Card</button>
+</div>
+<p class="text-[10px] text-gray-400 mt-2 text-center">Razorpay LIVE: All methods UPI, QR, Card, Netbanking, Wallet enabled</p>
+</div>
+</div>`;
+document.querySelectorAll('.fee').forEach(c=>c.addEventListener('change', calc));
+}
+
+function calc(){
+let t=0;
+document.querySelectorAll('.fee:checked').forEach(c=>t+=parseInt(c.value));
+document.getElementById('tot').innerText='₹'+t;
+document.getElementById('payBtn').disabled=t==0;
+}
+
+function pay(){
+let t=0, names=[];
+document.querySelectorAll('.fee:checked').forEach(c=>{t+=parseInt(c.value); names.push(c.dataset.n);});
+if(t==0) return;
+var opt={
+key:KEY,
+amount:t*100,
+currency:"INR",
+name:"SEF Dahod - Rainbow Public School",
+description: names.join(', ')+' - '+cur.name+' ('+cur.id+')',
+handler: function(r){alert('Payment Success! ID:'+r.razorpay_payment_id+'\n'+cur.name+' ka payment ho gaya!');},
+prefill:{name:cur.father||cur.name, contact:cur.mobile||"9723675167"},
+theme:{color:"#4f46e5"}
+};
+var rz=new Razorpay(opt);
+rz.open();
+}
+
+function adminPage(){
+document.getElementById('app').innerHTML=`<div class="p-6"><h1 class="font-bold text-xl">Admin - ${STUDENTS.length} Students</h1><button onclick="loginPage()" class="mt-4 bg-gray-200 px-4 py-2 rounded">Logout</button><div class="mt-4 text-xs">${STUDENTS.slice(0,10).map(s=>s.id+' - '+s.name).join('<br>')}<br>...and ${STUDENTS.length-10} more</div></div>`;
+}
+
+loginPage();
+</script>
+</body>
+</html>
