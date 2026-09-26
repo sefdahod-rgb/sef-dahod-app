@@ -450,5 +450,50 @@ function closeModal(){ document.getElementById('adminModal').classList.add('hidd
 
 loginPage();
 </script>
+
+<script>
+// ADMIN CONTROL: Q1/Q2/Q3/Q4 Paid Click -> Student Lock
+function adminTogglePaid(studentId, qtrName){
+  const key='sef_paid_fees_'+studentId;
+  let paid=getLS(key, []);
+  const student=STUDENTS.find(x=>x.id===studentId);
+  if(paid.includes(qtrName)){
+    if(!confirm(studentId+' ki '+qtrName+' Unpaid?')) return;
+    paid=paid.filter(p=>p!==qtrName);
+    setLS(key, paid);
+    let all=getLS('sef_fees_collection', []);
+    all=all.filter(f=>!(f.studentId===studentId && f.feesNames.includes(qtrName)));
+    setLS('sef_fees_collection', all);
+  } else {
+    if(!confirm(studentId+' ki '+qtrName+' PAID? Student me Lock hoga!')) return;
+    paid.push(qtrName);
+    setLS(key, paid);
+    let all=getLS('sef_fees_collection', []);
+    all.push({id:Date.now(), studentId:studentId, studentName:student?student.name:'', studentClass:student?student.class:'', father:student?student.father:'', mobile:student?student.mobile:'', amount:7500, feesNames:qtrName, paymentId:'ADMIN-'+Date.now(), date:new Date().toLocaleString(), status:'Paid by Admin'});
+    setLS('sef_fees_collection', all);
+  }
+  adminTab('students');
+}
+(function(){
+  const orig = window.adminTab;
+  if(!orig) return;
+  window.adminTab = function(tab){
+    if(tab==='students'){
+      document.querySelectorAll('[id^="tab-"]').forEach(b=>{b.className="bg-gray-100 px-4 py-2 rounded-full text-sm whitespace-nowrap";});
+      const active=document.getElementById('tab-'+tab);
+      if(active) active.className="bg-[#4f46e5] text-white px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap";
+      const content=document.getElementById('adminContent');
+      content.innerHTML=`<div class="bg-white rounded-[20px] border p-4"><div class="flex justify-between items-center mb-4"><h3 class="font-bold">Students - `+STUDENTS.length+` | Admin Qtr Click → Student Lock</h3><input id="searchStudent" oninput="filterStudents()" placeholder="Search" class="border rounded-full px-4 py-2 text-sm"></div><div class="overflow-auto"><table class="w-full text-sm"><thead class="bg-gray-50"><tr><th class="p-2 text-left">ID</th><th class="p-2 text-left">Name</th><th class="p-2">Class</th><th class="p-2">Q1</th><th class="p-2">Q2</th><th class="p-2">Q3</th><th class="p-2">Q4</th></tr></thead><tbody id="studentTable">`+STUDENTS.map(s=>{
+        const paid=getLS('sef_paid_fees_'+s.id,[]);
+        function btn(q){ const is=paid.includes(q); return `<button onclick="adminTogglePaid('${s.id}','${q}')" class="${is?'bg-green-600 text-white':'bg-gray-100'} px-2 py-1 rounded-full text-[11px] font-bold">${is?'✅ '+q:'☐ '+q}</button>`; }
+        return `<tr class="border-b"><td class="p-2 font-bold">${s.id}</td><td class="p-2">${s.name}</td><td class="p-2">${s.class}</td><td class="p-2">${btn('Q1 Fees')}</td><td class="p-2">${btn('Q2 Fees')}</td><td class="p-2">${btn('Q3 Fees')}</td><td class="p-2">${btn('Q4 Fees')}</td></tr>`;
+      }).join('')+`</tbody></table></div><p class="text-[11px] text-gray-500 mt-3">Admin Qtr Click → Green → Student Lock</p></div>`;
+      return;
+    }
+    return orig(tab);
+  };
+})();
+</script>
+
 </body>
 </html>
