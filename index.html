@@ -50,7 +50,7 @@ document.getElementById('app').innerHTML=`
 <img src="logo.png" class="absolute top-4 right-4 w-12 h-12 rounded-full bg-white p-1">
 <div class="flex justify-between items-start">
 <div class="flex gap-3"><div class="w-14 h-14 bg-white text-[#4f46e5] rounded-full flex items-center justify-center font-black text-xl">`+s.name[0]+`</div><div><h2 class="font-bold text-[15px]">`+s.name+`</h2><p class="text-[11px] opacity-80">`+s.id+` | `+s.class+` | `+s.father+`</p><p class="text-[10px] bg-white/20 px-2 py-0.5 rounded-full inline-block mt-1">`+s.mobile+`</p></div></div>
-<button onclick="logout()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center"><i class="fa-solid fa-right-from-bracket text-xs"></i></button>
+<button onclick="logout()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center"><i class="fa-solid fa-right-from-bracket text-xs"></i> Logout</button>
 </div>
 <div class="mt-5 grid grid-cols-3 gap-3">
 <div class="bg-white rounded-2xl p-3 text-center text-gray-800"><p class="text-[10px] text-gray-400">PRESENT</p><p class="font-black text-lg text-green-600">`+att.present+`</p></div>
@@ -78,7 +78,7 @@ document.getElementById('app').innerHTML=`
 <div class="max-w-md mx-auto min-h-screen bg-[#f6f7fb] pb-24">
 <div class="bg-gradient-to-br from-[#0f172a] to-[#4f46e5] p-6 rounded-b-[36px] text-white relative">
 <img src="logo.png" class="absolute top-4 right-4 w-12 h-12 rounded-full bg-white p-1">
-<div class="flex justify-between"><div class="flex gap-3"><div class="w-14 h-14 bg-white text-[#4f46e5] rounded-full flex items-center justify-center font-black">`+s.name[0]+`</div><div><h2 class="font-bold">`+s.name+`</h2><p class="text-[11px] opacity-80">`+s.id+` | `+s.subject+`</p></div></div><button onclick="logout()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center"><i class="fa-solid fa-right-from-bracket text-xs"></i></button></div>
+<div class="flex justify-between"><div class="flex gap-3"><div class="w-14 h-14 bg-white text-[#4f46e5] rounded-full flex items-center justify-center font-black">`+s.name[0]+`</div><div><h2 class="font-bold">`+s.name+`</h2><p class="text-[11px] opacity-80">`+s.id+` | `+s.subject+`</p></div></div><button onclick="logout()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center"><i class="fa-solid fa-right-from-bracket text-xs"></i> Logout</button></div>
 <div class="mt-4 bg-white/90 text-gray-800 rounded-2xl p-3 text-center"><p class="font-bold text-sm">Teacher Panel - `+STUDENTS.length+` Students</p></div>
 </div>
 <div class="p-4 grid grid-cols-2 gap-3 -mt-3">
@@ -112,13 +112,18 @@ document.getElementById('app').innerHTML=`
 </div>`;
 adminTab('students');
 }
+
+function editStudent(id){const s=STUDENTS.find(x=>x.id===id); if(!s) return; const name=prompt('Name:', s.name); if(name!==null) s.name=name; const cls=prompt('Class:', s.class); if(cls!==null) s.class=cls; const mob=prompt('Mobile:', s.mobile); if(mob!==null) s.mobile=mob; setLS('sef_final_students_v83', STUDENTS); alert('Updated!'); adminTab('students');}
+function deleteStudent(id){if(!confirm('Delete '+id+'?')) return; STUDENTS=STUDENTS.filter(x=>x.id!==id); setLS('sef_final_students_v83', STUDENTS); adminTab('students');}
+function filterStudents(){const q=(document.getElementById('searchStudent')?.value||'').toLowerCase(); document.querySelectorAll('#studentTable tr').forEach(r=>{r.style.display=r.innerText.toLowerCase().includes(q)?'':'none';});}
+
 function adminTogglePaid(id,q){let paid=getLS('sef_paid_fees_'+id,[]); if(paid.includes(q)){paid=paid.filter(x=>x!==q);}else{paid.push(q); let all=getLS('sef_fees_collection',[]); all.push({id:Date.now(), studentId:id, studentName:(STUDENTS.find(s=>s.id===id)||{}).name||'', studentClass:(STUDENTS.find(s=>s.id===id)||{}).class||'', amount:7500, feesNames:q, paymentId:'ADMIN-'+Date.now(), date:new Date().toLocaleString(), status:'Paid by Admin'}); setLS('sef_fees_collection',all);} setLS('sef_paid_fees_'+id,paid); adminTab('students');}
 function adminTab(tab){
 document.querySelectorAll('[id^="tab-"]').forEach(b=>{b.className="bg-gray-100 px-4 py-2 rounded-full text-sm whitespace-nowrap";});
 const a=document.getElementById('tab-'+tab); if(a){if(tab==='fees') a.className="bg-green-600 text-white px-4 py-2 rounded-full font-bold"; else a.className="bg-[#4f46e5] text-white px-4 py-2 rounded-full font-bold";}
 const c=document.getElementById('adminContent');
 if(tab==='students'){
-c.innerHTML=`<div class="bg-white rounded-[20px] border p-4"><h3 class="font-bold">Students - `+STUDENTS.length+` | Admin Qtr Click → Student Lock (Requirement)</h3><div class="overflow-auto mt-4"><table class="w-full text-sm"><thead class="bg-gray-50"><tr><th class="p-2 text-left">ID</th><th class="p-2 text-left">Name</th><th class="p-2">Class</th><th class="p-2">Q1</th><th class="p-2">Q2</th><th class="p-2">Q3</th><th class="p-2">Q4</th></tr></thead><tbody>`+STUDENTS.map(s=>{const paid=getLS('sef_paid_fees_'+s.id,[]); function btn(q){const is=paid.includes(q); return `<button onclick="adminTogglePaid('${s.id}','${q}')" class="${is?'bg-green-600 text-white':'bg-gray-100'} px-2 py-1 rounded-full text-[11px] font-bold">${is?'✅ '+q:'☐ '+q}</button>`;} return `<tr class="border-b"><td class="p-2 font-bold">${s.id}</td><td class="p-2">${s.name}</td><td class="p-2">${s.class}</td><td class="p-2">${btn('Q1 Fees')}</td><td class="p-2">${btn('Q2 Fees')}</td><td class="p-2">${btn('Q3 Fees')}</td><td class="p-2">${btn('Q4 Fees')}</td></tr>`;}).join('')+`</tbody></table></div><p class="text-[11px] text-gray-500 mt-3">Example: 215 ki Q1 Paid click → 215 ke app me Q1 Lock</p></div>`;
+c.innerHTML=`<div class="bg-white rounded-[20px] border p-4"><h3 class="font-bold">Students - `+STUDENTS.length+` | Admin Qtr Click → Student Lock (Requirement)</h3><div class="overflow-auto mt-4"><table class="w-full text-sm"><thead class="bg-gray-50"><tr><th class="p-2 text-left">ID</th><th class="p-2 text-left">Name</th><th class="p-2">Class</th><th class="p-2">Q1</th><th class="p-2">Q2</th><th class="p-2">Q3</th><th class="p-2">Q4</th><th class="p-2">Action</th></tr></thead><tbody>`+STUDENTS.map(s=>{const paid=getLS('sef_paid_fees_'+s.id,[]); function btn(q){const is=paid.includes(q); return `<button onclick="adminTogglePaid('${s.id}','${q}')" class="${is?'bg-green-600 text-white':'bg-gray-100'} px-2 py-1 rounded-full text-[11px] font-bold">${is?'✅ '+q:'☐ '+q}</button>`;} return `<tr class="border-b"><td class="p-2 font-bold">${s.id}</td><td class="p-2">${s.name}<br><span class="text-[10px] text-gray-400">${s.mobile||''}</span></td><td class="p-2">${s.class}</td><td class="p-2">${btn('Q1 Fees')}</td><td class="p-2">${btn('Q2 Fees')}</td><td class="p-2">${btn('Q3 Fees')}</td><td class="p-2">${btn('Q4 Fees')}</td><td class="p-2 flex gap-1"><button onclick="editStudent('${s.id}')" class="w-7 h-7 bg-blue-50 text-blue-600 rounded-full"><i class="fa-solid fa-pen text-[10px]"></i></button><button onclick="deleteStudent('${s.id}')" class="w-7 h-7 bg-red-50 text-red-600 rounded-full"><i class="fa-solid fa-trash text-[10px]"></i></button></td></tr>`;}).join('')+`</tbody></table></div><p class="text-[11px] text-gray-500 mt-3">Example: 215 ki Q1 Paid click → 215 ke app me Q1 Lock</p></div>`;
 return;
 }
 if(tab==='fees'){
