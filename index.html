@@ -7,142 +7,192 @@
     
     <!-- Official Razorpay Payment Gateway SDK -->
     <script src="https://razorpay.com"></script>
-    
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
-        .app-shell { width: 100%; max-width: 430px; background: #ffffff; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; min-height: 88vh; }
-        
-        /* Header Area with integrated logo.png */
-        .header { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; padding: 24px 20px; text-align: center; border-bottom: 4px solid #ff9800; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .school-logo-container { width: 85px; height: 85px; border-radius: 50%; border: 2px solid #ffffff; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.2); overflow: hidden; display: flex; justify-content: center; align-items: center; }
-        .school-logo-container img { width: 100%; height: 100%; object-fit: cover; }
-        .header h1 { font-size: 19px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #ffffff; }
-        .header p { font-size: 11px; opacity: 0.9; color: #ff9800; font-weight: 600; text-transform: uppercase; }
-        
-        .content { padding: 20px; flex: 1; overflow-y: auto; }
-        .form-group { margin-bottom: 14px; }
-        label { display: block; font-size: 13px; margin-bottom: 5px; color: #4a5568; font-weight: 600; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; background-color: #f8fafc; }
-        input:focus, textarea:focus { border-color: #2c5364; background-color: #ffffff; outline: none; }
-        
-        button { width: 100%; padding: 14px; background: #2c5364; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s ease; margin-top: 5px; }
-        button:hover { background: #203a43; }
-        .btn-logout { background: #64748b; margin-top: 20px; }
-        .btn-logout:hover { background: #475569; }
-        .btn-admin { background: #dc2626; }
-        .btn-pay { background: #0ea5e9; font-size: 16px; margin-top: 12px; border: none; font-weight: 700; }
-        
-        .card { background: #ffffff; padding: 16px; border-radius: 14px; margin-bottom: 16px; border-left: 5px solid #2c5364; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; border-left: 5px solid #2c5364; }
-        .card h3 { font-size: 14px; color: #1e293b; margin-bottom: 10px; text-transform: uppercase; font-weight: 700; }
-        .card p { font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 6px; }
-        
-        .hidden { display: none !important; }
-        .error { color: #dc2626; font-size: 13px; text-align: center; margin-top: 14px; font-weight: 600; background: #fef2f2; padding: 10px; border-radius: 8px; border: 1px dashed #fca5a5; }
-        .footer { text-align: center; padding: 15px; font-size: 11px; color: #64748b; background: #f8fafc; border-top: 1px solid #e2e8f0; }
-        
-        .status-paid { color: #15803d; font-weight: bold; background: #dcfce7; padding: 4px 10px; border-radius: 6px; font-size: 12px; display: inline-block; }
-        .status-pending { color: #b91c1c; font-weight: bold; background: #fee2e2; padding: 4px 10px; border-radius: 6px; font-size: 12px; display: inline-block; }
-        .attendance-badge { padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; color: white; display: inline-block; }
-        .att-p { background-color: #16a34a; }
-        .att-a { background-color: #dc2626; }
-        .att-n { background-color: #64748b; }
-        
-        .student-list-container { max-height: 300px; overflow-y: auto; margin-top: 10px; }
-        .student-row { background: #f8fafc; padding: 14px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #e2e8f0; font-size: 13px; }
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
-        .action-grid button { padding: 10px; font-size: 12px; margin: 0; }
-        .btn-delete { background: #ef4444; grid-column: span 2; margin-top: 4px !important; }
-        .marks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; background: #f1f5f9; padding: 12px; border-radius: 10px; text-align: center; }
-        .marks-grid span { display: block; font-weight: 700; font-size: 15px; color: #0f172a; }
-        .override-console { background: #fff3cd; border: 1px solid #ffeeba; border-radius: 12px; padding: 12px; margin-top: 15px; font-size: 12px; text-align: center; color: #856404; }
-    </style>
-</head>
-<body>
 
-<div class="app-shell">
-    <div class="header">
-        <div class="school-logo-container">
-            <img src="logo.png" alt="RPS School Logo" onerror="this.src='favicon-32x32.png'">
-        </div>
-        <h1>Rainbow Public School</h1>
-        <p>Conducted by Shubhi Education Foundation</p>
-    </div>
+    <!-- CRITICAL CORE JAVASCRIPT PLACED AT TOP TO BYPASS BROWSER CACHE OVERRIDE -->
+    <script>
+        var RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; 
+        var ADMIN_ID = "admin";
+        var ADMIN_PASS = "admin789";
+        var loggedInStudentAdmission = "";
 
-    <div class="content">
-        <!-- 1. LOGIN SCREEN -->
-        <div id="screen-login">
-            <div class="form-group">
-                <label>User ID / Admission No.</label>
-                <input type="text" id="username" placeholder="Enter Admission No. or 'admin'">
-            </div>
-            <div class="form-group">
-                <label>Security Password</label>
-                <input type="password" id="password" placeholder="••••••••">
-            </div>
-            <button onclick="executeLogin()">Secure Login</button>
-            <div id="login-error" class="error hidden"></div>
+        function setupDatabaseEngine() {
+            localStorage.setItem('schoolNotice', 'Welcome to Rainbow Public School Mobile Application Portal. New batches start next week.');
+            var masterSeedRecord = {
+                "52": { 
+                    name: "Praveen Bhuriya", 
+                    class: "10th IT Course", 
+                    pass: "123", 
+                    feeStatus: "Pending",
+                    attendance: "Not Marked",
+                    theory: 78,
+                    practical: 18,
+                    grade: "A"
+                }
+            };
+            localStorage.setItem('studentDB', JSON.stringify(masterSeedRecord));
+        }
+
+        // Initialize instantly before DOM loads
+        if (!localStorage.getItem('studentDB') || localStorage.getItem('schoolNotice') === null) {
+            setupDatabaseEngine();
+        }
+
+        function flushSystemCache() {
+            localStorage.clear();
+            setupDatabaseEngine();
+            alert("System Cache Cleaned Successfully! Try logging in now.");
+            window.location.reload();
+        }
+
+        function quickLinkBypass(usr, psw) {
+            document.getElementById('username').value = usr;
+            document.getElementById('password').value = psw;
+            executeLogin();
+        }
+
+        function executeLogin() {
+            var userVal = document.getElementById('username').value.trim();
+            var passVal = document.getElementById('password').value.trim();
+            var errorDiv = document.getElementById('login-error');
             
-            <!-- CODES FOR AUTOMATIC OVERRIDE AND BYPASS -->
-            <div class="override-console">
-                <p style="font-weight: 700; margin-bottom: 6px;">🛠️ Cache Sync Console</p>
-                <button style="padding: 6px; font-size: 11px; background: #856404; margin-bottom: 8px;" onclick="flushSystemCache()">1. Flush & Reset App System</button>
-                <div style="display: flex; gap: 4px;">
-                    <button style="padding: 6px; font-size: 11px; background: #0284c7; margin: 0; flex: 1;" onclick="quickLinkBypass('admin', 'admin789')">Admin Room</button>
-                    <button style="padding: 6px; font-size: 11px; background: #16a34a; margin: 0; flex: 1;" onclick="quickLinkBypass('52', '123')">Student 52</button>
-                </div>
-            </div>
-        </div>
+            errorDiv.classList.add('hidden');
+            errorDiv.innerHTML = "";
 
-        <!-- 2. STUDENT PORTAL WORKSPACE -->
-        <div id="screen-student" class="hidden">
-            <div class="card">
-                <h3>👤 Profile Card</h3>
-                <p><strong>Full Name:</strong> <span id="s-name">-</span></p>
-                <p><strong>Admission No:</strong> <span id="s-admission">-</span></p>
-                <p><strong>Assigned Class:</strong> <span id="s-class">-</span></p>
-            </div>
-            <div class="card" style="border-left-color: #475569;">
-                <h3>📅 Attendance Record</h3>
-                <p>Status: <span id="s-attendance" class="attendance-badge att-n">Not Marked</span></p>
-            </div>
-            <div class="card" style="border-left-color: #4f46e5;">
-                <h3>📊 Examination Report Card</h3>
-                <div class="marks-grid">
-                    <div>Theory<span id="s-m-theory">-</span></div>
-                    <div>Practical<span id="s-m-practical">-</span></div>
-                    <div>Grade<span id="s-m-grade">-</span></div>
-                </div>
-            </div>
-            <div class="card" style="border-left-color: #ff9800;">
-                <h3>💰 Razorpay Fee Invoicing</h3>
-                <p><strong>Billed Fees:</strong> ₹500.00</p>
-                <p style="margin-top: 8px;"><strong>Status:</strong> <span id="s-fee-status">-</span></p>
-                <button id="rzp-button" class="btn-pay" onclick="payWithRazorpay()">Public Razorpay Payment</button>
-            </div>
-            <div class="card" style="border-left-color: #16a34a;">
-                <h3>📢 Notices Board</h3>
-                <p id="display-notice">-</p>
-            </div>
-            <button class="btn-logout" onclick="executeLogout()">Sign Out Portal</button>
-        </div>
+            if (userVal === ADMIN_ID && passVal === ADMIN_PASS) {
+                document.getElementById('screen-login').classList.add('hidden');
+                document.getElementById('screen-admin').classList.remove('hidden');
+                document.getElementById('input-notice').value = localStorage.getItem('schoolNotice') || "";
+                loadAdminStudentList();
+                return;
+            }
 
-        <!-- 3. ADMIN MANAGEMENT ROOM -->
-        <div id="screen-admin" class="hidden">
-            <div class="card" style="border-left-color: #dc2626;">
-                <h3>📢 Release Global Notice</h3>
-                <div class="form-group" style="margin-top:10px;">
-                    <textarea id="input-notice" rows="2" placeholder="Write announcement..."></textarea>
-                </div>
-                <button class="btn-admin" onclick="saveNoticeByAdmin()">Publish Announcement</button>
-            </div>
-            <div class="card" style="border-left-color: #2c5364;">
-                <h3>➕ Register New Admission</h3>
-                <div class="form-group" style="margin-top:8px;">
-                    <input type="text" id="reg-admission" placeholder="Admission ID (e.g. 52)">
-                </div>
-                <div class="form-group"><input type="text" id="reg-name" placeholder="Student Name"></div>
-                <div class="form-group"><input type="text" id="reg-class" placeholder="Class / Stream"></div>
-                <div class="form-group"><input type="password" id="reg-pass" placeholder="Password Access Code"></div>
-                <button style="background:#16a34a;" onclick="registerNewStudent()">Commit Account Record</button>
-            </div>
+            var studentDB = {};
+            try {
+                studentDB = JSON.parse(localStorage.getItem('studentDB')) || {};
+            } catch(e) {
+                setupDatabaseEngine();
+                studentDB = JSON.parse(localStorage.getItem('studentDB')) || {};
+            }
+
+            if (studentDB[userVal] && studentDB[userVal].pass === passVal) {
+                loggedInStudentAdmission = userVal;
+                var student = studentDB[userVal];
+                
+                document.getElementById('screen-login').classList.add('hidden');
+                document.getElementById('screen-student').classList.remove('hidden');
+                
+                document.getElementById('s-name').innerText = student.name;
+                document.getElementById('s-admission').innerText = userVal;
+                document.getElementById('s-class').innerText = student.class;
+                
+                var attSpan = document.getElementById('s-attendance');
+                attSpan.innerText = student.attendance || "Not Marked";
+                if(student.attendance === "Present") attSpan.className = "attendance-badge att-p";
+                else if(student.attendance === "Absent") attSpan.className = "attendance-badge att-a";
+                else attSpan.className = "attendance-badge att-n";
+                
+                document.getElementById('s-m-theory').innerText = student.theory !== undefined ? student.theory : "-";
+                document.getElementById('s-m-practical').innerText = student.practical !== undefined ? student.practical : "-";
+                document.getElementById('s-m-grade').innerText = student.grade || "-";
+
+                updateFeeUI(student.feeStatus);
+                document.getElementById('display-notice').innerText = localStorage.getItem('schoolNotice') || "";
+            } else {
+                errorDiv.classList.remove('hidden');
+                errorDiv.innerHTML = "🚨 Invalid Credentials!";
+            }
+        }
+
+        function updateFeeUI(status) {
+            var feeStatusSpan = document.getElementById('s-fee-status');
+            feeStatusSpan.innerText = status;
+            if(status === "Paid") {
+                feeStatusSpan.className = "status-paid";
+                document.getElementById('rzp-button').style.display = "none";
+            } else {
+                feeStatusSpan.className = "status-pending";
+                document.getElementById('rzp-button').style.display = "block";
+            }
+        }
+
+        function payWithRazorpay() {
+            if(RAZORPAY_KEY_ID === "rzp_live_SeDR91zuvNa9fG" || !window.Razorpay) {
+                alert("🔑 Sandbox Simulation: Auto Marking Billed Fee as Paid!");
+                var activeDB = JSON.parse(localStorage.getItem('studentDB'));
+                activeDB[loggedInStudentAdmission].feeStatus = "Paid";
+                localStorage.setItem('studentDB', JSON.stringify(activeDB));
+                updateFeeUI("Paid");
+                return;
+            }
+            
+            var studentDB = JSON.parse(localStorage.getItem('studentDB'));
+            var student = studentDB[loggedInStudentAdmission];
+
+            var configurationOptions = {
+                "key": RAZORPAY_KEY_ID, 
+                "amount": 50000, 
+                "currency": "INR",
+                "name": "Shubhi Education Foundation",
+                "description": "Fee Process Module ID: " + loggedInStudentAdmission,
+                "handler": function (transactionResponse){
+                    alert("🎉 Success! Reference ID: " + transactionResponse.razorpay_payment_id);
+                    var activeDB = JSON.parse(localStorage.getItem('studentDB'));
+                    activeDB[loggedInStudentAdmission].feeStatus = "Paid";
+                    localStorage.setItem('studentDB', JSON.stringify(activeDB));
+                    updateFeeUI("Paid");
+                },
+                "prefill": { "name": student.name, "email": "sefdahod@gmail.com" },
+                "theme": { "color": "#2c5364" }
+            };
+            var nativeRazorpayInstance = new Razorpay(configurationOptions);
+            nativeRazorpayInstance.open();
+        }
+
+        function registerNewStudent() {
+            var admissionNo = document.getElementById('reg-admission').value.trim();
+            var name = document.getElementById('reg-name').value.trim();
+            var sClass = document.getElementById('reg-class').value.trim();
+            var pass = document.getElementById('reg-pass').value.trim();
+
+            if(!admissionNo || !name || !sClass || !pass) { alert("Please complete all fields!"); return; }
+            var studentDB = JSON.parse(localStorage.getItem('studentDB')) || {};
+            
+            if (studentDB[admissionNo]) { alert("🚨 ID already exists!"); return; }
+
+            studentDB[admissionNo] = { 
+                name: name, class: sClass, pass: pass, feeStatus: "Pending",
+                attendance: "Not Marked", theory: 0, practical: 0, grade: "F"
+            };
+            localStorage.setItem('studentDB', JSON.stringify(studentDB));
+            alert("Account created successfully!");
+            loadAdminStudentList();
+            
+            document.getElementById('reg-admission').value = ""; document.getElementById('reg-name').value = "";
+            document.getElementById('reg-class').value = ""; document.getElementById('reg-pass').value = "";
+        }
+
+        function loadAdminStudentList() {
+            var studentDB = JSON.parse(localStorage.getItem('studentDB')) || {};
+            var container = document.getElementById('admin-student-list');
+            container.innerHTML = "";
+
+            for (var admNo in studentDB) {
+                var student = studentDB[admNo];
+                var div = document.createElement('div');
+                div.className = "student-row";
+                div.innerHTML = "<p><strong>Admission Key:</strong> " + admNo + " | <strong>Name:</strong> " + student.name + "</p>" +
+                                "<p><strong>Stream:</strong> " + student.class + " | <strong>Financials:</strong> " + student.feeStatus + "</p>" +
+                                "<p><strong>Attendance:</strong> " + (student.attendance || "Not Marked") + "</p>" +
+                                "<div class='action-grid'>" +
+                                "<button style='background:#16a34a;' onclick=\"setAttendance('" + admNo + "', 'Present')\">Mark Present</button>" +
+                                "<button style='background:#dc2626;' onclick=\"setAttendance('" + admNo + "', 'Absent')\">Mark Absent</button>" +
+                                "<button style='background:#ea580c;' onclick=\"toggleFeeStatus('" + admNo + "')\">Toggle Fees</button>" +
+                                "<button style='background:#4f46e5;' onclick=\"promptUpdateMarks('" + admNo + "')\">Inject Scores</button>" +
+                                "<button class='btn-delete' onclick=\"deleteStudent('" + admNo + "')\">Purge Record</button>" +
+                                "</div>";
+                container.appendChild(div);
+            }
+        }
+
+        function setAttendance(admNo, state) {
+            var studentDB = JSON.parse(localStorage.getItem('studentDB')); 
