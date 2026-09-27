@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEF Dahod - Complete School App</title>
+    <!-- Razorpay Checkout Script Integration -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; }
+        .app-shell { width: 100%; max-width: 430px; background: #ffffff; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; min-height: 88vh; }
+        .header { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; padding: 25px 20px; text-align: center; border-bottom: 4px solid #ff9800; }
+        .header h1 { font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .header p { font-size: 12px; opacity: 0.8; margin-top: 5px; }
+        .content { padding: 18px; flex: 1; overflow-y: auto; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 13px; margin-bottom: 4px; color: #555; font-weight: 500; }
+        input, textarea, select { width: 100%; padding: 11px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 14px; }
+        input:focus, textarea:focus, select:focus { border-color: #2c5364; outline: none; }
+        button { width: 100%; padding: 13px; background: #2c5364; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 5px; }
+        button:hover { background: #203a43; }
+        .btn-logout { background: #6b7280; margin-top: 15px; }
+        .btn-admin { background: #d32f2f; }
+        .btn-pay { background: #28a745; font-size: 16px; margin-top: 10px; border: none; font-weight: bold; }
+        .btn-pay:hover { background: #218838; }
+        .card { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid #2c5364; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .card h3 { font-size: 15px; color: #203a43; margin-bottom: 6px; }
+        .card p { font-size: 14px; color: #4b5563; line-height: 1.4; }
+        .hidden { display: none !important; }
+        .error { color: #dc2626; font-size: 13px; text-align: center; margin-top: 10px; font-weight: 500; }
+        .footer { text-align: center; padding: 15px; font-size: 11px; color: #7f8c8d; background: #f8f9fa; border-top: 1px solid #e5e7eb; }
+        .status-paid { color: #2e7d32; font-weight: bold; }
+        .status-pending { color: #c62828; font-weight: bold; }
+        .student-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 13px; }
+        .student-row button { width: auto; padding: 4px 8px; font-size: 11px; margin: 0; background: #ff9800; border-radius: 6px; }
+        .attendance-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-left: 5px; }
+        .att-present { background-color: #e2f0d9; color: #385723; }
+        .att-absent { background-color: #fce4d6; color: #c65911; }
+        .att-none { background-color: #fff2cc; color: #7f6000; }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+    <div class="header">
+        <h1 id="app-title">Shubhi Education Foundation</h1>
+        <p id="app-subtitle">Dahod, Gujarat (Regd. NGO)</p>
+    </div>
+
+    <div class="content">
+        <!-- 1. लॉगिन स्क्रीन -->
+        <div id="screen-login">
+            <div class="form-group">
+                <label>यूज़र आईडी / रोल नंबर</label>
+                <input type="text" id="username" placeholder="छात्र रोल नंबर या admin लिखें">
+            </div>
+            <div class="form-group">
+                <label>सुरक्षा पासवर्ड</label>
+                <input type="password" id="password" placeholder="••••••••">
+            </div>
+            <button onclick="executeLogin()">सुरक्षित लॉगिन करें</button>
+            <div id="login-error" class="error"></div>
+        </div>
+
+        <!-- 2. छात्र डैशबोर्ड स्क्रीन -->
+        <div id="screen-student" class="hidden">
+            <div class="card">
+                <h3>👤 छात्र प्रोफाइल विवरण</h3>
+                <p><strong>नाम:</strong> <span id="s-name">-</span></p>
+                <p><strong>रोल नंबर:</strong> <span id="s-roll">-</span></p>
+                <p><strong>कक्षा:</strong> <span id="s-class">-</span></p>
+            </div>
+
+            <!-- दैनिक उपस्थिति स्टेटस -->
+            <div class="card" style="border-left-color: #00b0ff;">
+                <h3>📅 आज की उपस्थिति (Attendance)</h3>
+                <p>स्थिति: <span id="s-attendance-status" class="attendance-badge att-none">अपडेट नहीं की गई</span></p>
+            </div>
+            
+            <div class="card" style="border-left-color: #ff9800;">
+                <h3>💰 मासिक फीस प्रबंधन</h3>
+                <p><strong>फीस राशि:</strong> ₹500</p>
+                <p><strong>स्थिति:</strong> <span id="s-fee-status">-</span></p>
+                <!-- Razorpay पेमेंट बटन -->
+                <button id="rzp-button" class="btn-pay" onclick="payWithRazorpay()">💳 Razorpay से ऑनलाइन फीस भरें</button>
+            </div>
+
+            <!-- परीक्षा अंक कार्ड -->
+            <div class="card" style="border-left-color: #673ab7;">
+                <h3>📊 परीक्षा परिणाम (Exam Marks)</h3>
+                <p><strong>IT/Computer:</strong> <span id="m-comp">-</span>/100</p>
+                <p><strong>टोटल ग्रेड:</strong> <span id="m-grade">-</span></p>
+            </div>
+
+            <div class="card" style="border-left-color: #2e7d32;">
+                <h3>📢 लाइव सूचना पट्ट (Notice Board)</h3>
+                <p id="display-notice">-</p>
+            </div>
+            <button class="btn-logout" onclick="executeLogout()">लॉगआउट</button>
+        </div>
+
+        <!-- 3. एडमिन / कंट्रोल पैनल स्क्रीन -->
+        <div id="screen-admin" class="hidden">
+            <!-- नोटिस अपडेट -->
+            <div class="card" style="border-left-color: #d32f2f;">
+                <h3>📢 लाइव नोटिस अपडेट करें</h3>
+                <div class="form-group" style="margin-top:10px;">
+                    <textarea id="input-notice" rows="2" placeholder="यहाँ नया नोटिस लिखें..."></textarea>
+                </div>
+                <button class="btn-admin" onclick="saveNoticeByAdmin()">नोटिस पब्लिश करें</button>
+            </div>
+
+            <!-- नया छात्र जोड़े -->
+            <div class="card" style="border-left-color: #2c5364;">
+                <h3>➕ नया छात्र पंजीकृत करें</h3>
+                <div class="form-group" style="margin-top:8px;"><input type="text" id="reg-roll" placeholder="रोल नंबर (उदा: 101)"></div>
+                <div class="form-group"><input type="text" id="reg-name" placeholder="छात्र का पूरा नाम"></div>
+                <div class="form-group"><input type="text" id="reg-class" placeholder="कक्षा (उदा: 10th IT)"></div>
+                <div class="form-group"><input type="password" id="reg-pass" placeholder="लॉगिन पासवर्ड"></div>
+                <button style="background:#2e7d32;" onclick="registerNewStudent()">डेटाबेस में सुरक्षित करें</button>
+            </div>
+
+            <!-- छात्र फीस, अंक और अटेंडेंस कंट्रोल पैनल -->
+            <div class="card" style="border-left-color: #ff9800;">
+                <h3>👥 छात्र सूची और त्वरित प्रबंधन Dashboard</h3>
+                <div id="admin-student-list" style="margin-top:10px; max-height: 350px; overflow-y: auto;">
+                    <!-- डायनामिक लिस्ट यहाँ आएगी -->
+                </div>
+            </div>
+            <button class="btn-logout" onclick="executeLogout()">एडमिन लॉगआउट</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        Shubhi Education Foundation © 2026<br>Rainbow Public School, Dahod
+    </div>
+</div>
+
+<script>
+    // ⚙️ महत्वपूर्ण: अपनी Razorpay Live/Test Key ID को यहाँ बदलें
+    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; 
+
+    // डिफ़ॉल्ट डेटा इनिशियलाइज़ेशन
+    if (!localStorage.getItem('schoolNotice')) {
+        localStorage.setItem('schoolNotice', 'शुभी एजुकेशन फाउंडेशन (SEF) ऐप पर आपका स्वागत है। कंप्यूटर क्लास का नया बैच सोमवार से शुरू होगा।');
+    }
+    if (!localStorage.getItem('studentDB')) {
+        const defaultStudents = {
+            "101": { name: "प्रवीण भूरिया", class: "10th IT", pass: "123", feeStatus: "बकाया (Pending)", attendance: "Present", marks: 85, grade: "A" },
+            "102": { name: "कोमल संगोड़", class: "12th Computer", pass: "456", feeStatus: "जमा (Paid)", attendance: "None", marks: 92, grade: "A+" }
+        };
+        localStorage.setItem('studentDB', JSON.stringify(defaultStudents));
+    }
+
+    const ADMIN_ID = "admin";
+    const ADMIN_PASS = "admin789";
+    let loggedInStudentRoll = "";
+
+    function executeLogin() {
+        const userVal = document.getElementById('username').value.trim();
+        const passVal = document.getElementById('password').value.trim();
+        const errorDiv = document.getElementById('login-error');
+        errorDiv.innerText = "";
+
+        if (userVal === ADMIN_ID && passVal === ADMIN_PASS) {
+            document.getElementById('screen-login').classList.add('hidden');
+            document.getElementById('screen-admin').classList.remove('hidden');
+            document.getElementById('app-title').innerText = "SEF एडमिन रूम";
+            document.getElementById('input-notice').value = localStorage.getItem('schoolNotice');
+            loadAdminStudentList();
+            return;
+        }
+
+        const studentDB = JSON.parse(localStorage.getItem('studentDB'));
+        if (studentDB[userVal] && studentDB[userVal].pass === passVal) {
+            loggedInStudentRoll = userVal;
+            const student = studentDB[userVal];
+            
+            document.getElementById('screen-login').classList.add('hidden');
+            document.getElementById('screen-student').classList.remove('hidden');
+            document.getElementById('app-title').innerText = "स्टूडेंट पोर्टल";
+            
+            document.getElementById('s-name').innerText = student.name;
+            document.getElementById('s-roll').innerText = userVal;
+            document.getElementById('s-class').innerText = student.class;
+            
+            // मार्क्स और ग्रेड लोड करें
+            document.getElementById('m-comp').innerText = student.marks || "0";
+            document.getElementById('m-grade').innerText = student.grade || "N/A";
+
+            // अटेंडेंस बैच अपडेट
+            const attBadge = document.getElementById('s-attendance-status');
+            if (student.attendance === "Present") {
+                attBadge.innerText = "उपस्थित (Present)";
+                attBadge.className = "attendance-badge att-present";
+            } else if (student.attendance === "Absent") {
+                attBadge.innerText = "अनुपस्थित (Absent)";
+                attBadge.className = "attendance-badge att-absent";
+            } else {
+                attBadge.innerText = "अपडेट नहीं की गई";
+                attBadge.className = "attendance-badge att-none";
+            }
+            
+            updateFeeUI(student.feeStatus);
+            document.getElementById('display-notice').innerText = localStorage.getItem('schoolNotice');
+        } else {
+            errorDiv.innerText = "🚨 गलत रोल नंबर या पासवर्ड!";
+        }
+    }
+
+    function updateFeeUI(status) {
+        const feeStatusSpan = document.getElementById('s-fee-status');
+        feeStatusSpan.innerText = status;
+        if(status === "जमा (Paid)") {
+            feeStatusSpan.className = "status-paid";
+            document.getElementById('rzp-button').style.display = "none";
+        } else {
+            feeStatusSpan.className = "status-pending";
+            document.getElementById('rzp-button').style.display = "block";
+        }
+    }
+
+    // 💳 Razorpay भुगतान गेटवे फ़ंक्शन
+    function payWithRazorpay() {
+        const studentDB = JSON.parse(localStorage.getItem('studentDB'));
+        const student = studentDB[loggedInStudentRoll];
+
+        var options = {
+            "key": RAZORPAY_KEY_ID, 
+            "amount": 50000, // ₹500.00
+            "currency": "INR",
+            "name": "Shubhi Education Foundation",
+            "description": "मासिक आईटी कोर्स फीस - रोल नंबर " + loggedInStudentRoll,
+            "image": "https://www.sefdahod.in/logo.png",
+            "handler": function (response){
+                alert("🎉 भुगतान सफल! पेमेंट आईडी: " + response.razorpay_payment_id);
+                studentDB[loggedInStudentRoll].feeStatus = "जमा (Paid)";
+                localStorage.setItem('studentDB', JSON.stringify(studentDB));
+                updateFeeUI("जमा (Paid)");
+            },
+            "prefill": {
+                "name": student.name,
+                "email": "sefdahod@gmail.com"
+            },
+            "theme": {
+                "color": "#2c5364"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+
+    // एडमिन द्वारा छात्र जोड़ना
+    function registerNewStudent() {
+        const roll = document.getElementById('reg-roll').value.trim();
+        const name = document.getElementById('reg-name').value.trim();
+        const sClass = document.getElementById('reg-class').value.trim();
+        const pass = document.getElementById('reg-pass').value.trim();
+
+        if(!roll || !name || !sClass || !pass) { alert("सभी फील्ड्स भरें!"); return; }
+
+        const studentDB = JSON.parse(localStorage.getItem('studentDB'));
+        studentDB[roll] = { name: name, class: sClass, pass: pass, feeStatus: "बकाया (Pending)", attendance: "None", marks: 0, grade: "N/A" };
+        localStorage.setItem('studentDB', JSON.stringify(studentDB));
+        
+        alert(`🎓 ${name} को सफलतापूर्वक जोड़ दिया गया है!`);
+        loadAdminStudentList();
+        
+        document.getElementById('reg-roll').value = ""; document.getElementById('reg-name').value = "";
+        document.getElementById('reg-class').value = ""; document.getElementById('reg-pass').value = "";
+    }
+
+    // एडमिन पैनल में छात्रों की सूची और एडवांस टूल्स लोड करना
+    function loadAdminStudentList() {
+        const studentDB = JSON.parse(localStorage.getItem('studentDB'));
+        const container = document.getElementById('admin-student-list');
+        container.innerHTML = "";
+
+        for (let roll in studentDB) {
+            const student = studentDB[roll];
+            const div = document.createElement('div');
+            div.className = "card";
+            div.style.borderLeftColor = "#ff9800";
+            div.style.padding = "10px";
+            div.style.fontSize = "13px";
+            
+            div.innerHTML = `
+                <p><strong>रोल: ${roll}</strong> - ${student.name} (${student.class})</p>
+                <p>फीस: <strong>${student.feeStatus}</strong> 
+                    <button style="padding: 2px 5px; font-size:11px;" onclick="toggleFeeStatus('${roll}')">बदलें</button>
+                </p>
+                <p style="margin-top: 5px;">अटेंडेंस: <strong>${student.attendance}</strong> 
+                    <button style="padding: 2px 5px; font-size:11px; background:#00b0ff;" onclick="markAdminAttendance('${roll}', 'Present')">P</button>
+                    <button style="padding: 2px 5px; font-size:11px; background:#dc2626;" onclick="markAdminAttendance('${roll}', 'Absent')">A</button>
+                </p>
+                <p style="margin-top: 5px;">नंबर: <strong>${student.marks || 0} (${student.grade || 'N/A'})</strong>
+                    <button style="padding: 2px 5px; font-size:11px; background:#673ab7;" onclick="updateMarksPrompt('${roll}')">अंक डालें</button>
+                </p>
+            `;
+            container.appendChild(div);
+        }
+    }
+
+    // एडमिन द्वारा फीस स्थिति मैन्युअल रूप से बदलना
+    function toggleFeeStatus(roll) {
+        const studentDB = JSON.parse(localStorage.getItem('studentDB'));
+        studentDB[roll].feeStatus = (studentDB[roll].feeStatus === "बकाया (Pending)") ? "जमा (Paid)" : "बकाया (Pending)";
+        localStorage.setItem('studentDB', JSON.stringify(studentDB));
+        loadAdminStudentList();
+    }
+
+    // एडमिन द्वारा उपस्थिति लगाना
+    function markAdminAttendance(roll, status) {
+        const studentDB = JSON.parse(localStorage.getItem('studentDB'));
+        studentDB[roll].attendance = status;
+        localStorage.setItem('studentDB', JSON.stringify(studentDB));
+        loadAdminStudentList();
+    }
+
+    // एडमिन द्वारा परीक्षा के अंक अपडेट करना
+    function updateMarksPrompt(roll) {
+        const studentDB = JSON.parse(localStorage.getItem('studentDB'));
+        const newMarks = prompt("छात्र के नए अंक दर्ज करें (0 से 100):", studentDB[roll].marks || 0);
+        if (newMarks !== null) {
+            const m = parseInt(newMarks);
+            if(isNaN(m) || m < 0 || m > 100) {
+                alert("कृपया 0 से 100 के बीच एक मान्य संख्या डालें!");
+                return;
+            }
+            let grade = "F";
+            if (m >= 90) grade = "A+";
+            else if (m >= 80) grade = "A";
+            else if (m >= 70) grade = "B";
+            else if (m >= 50) grade = "C";
+            else if (m >= 35) grade = "D";
+
+            studentDB[roll].marks = m;
+            studentDB[roll].grade = grade;
+            localStorage.setItem('studentDB', JSON.stringify(studentDB));
+            loadAdminStudentList();
+        }
+    }
+
+    function saveNoticeByAdmin() {
+        const newTxt = document.getElementById('input-notice').value.trim();
+        if (newTxt === "") { alert("नोटिस लिखें!"); return; }
+        localStorage.setItem('schoolNotice', newTxt);
+        alert("🚀 नोटिस लाइव हो गया है!");
+    }
+
+    function executeLogout() {
+        document.getElementById('screen-student').classList.add('hidden');
+        document.getElementById('screen-admin').classList.add('hidden');
+        document.getElementById('screen-login').classList.remove('hidden');
+        document.getElementById('app-title').innerText = "Shubhi Education Foundation";
+        document.getElementById('username').value = "";
+        document.getElementById('password').value = "";
+    }
+</script>
+
+</body>
+</html>
