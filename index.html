@@ -9,19 +9,20 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
         body { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; }
-        .app-shell { width: 100%; max-width: 420px; background: #ffffff; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; min-height: 85vh; }
+        .app-shell { width: 100%; max-width: 430px; background: #ffffff; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; min-height: 88vh; }
         
         /* Brand Header with School Logo */
-        .header { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; padding: 20px; text-align: center; border-bottom: 4px solid #ff9800; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .header { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; padding: 22px 20px; text-align: center; border-bottom: 4px solid #ff9800; display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .school-logo { width: 85px; height: 85px; border-radius: 50%; border: 2px solid #ffffff; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-        .header h1 { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #ffffff; }
+        .header h1 { font-size: 19px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #ffffff; }
         .header p { font-size: 11px; opacity: 0.9; color: #ff9800; font-weight: 600; text-transform: uppercase; }
         
-        .content { padding: 20px; flex: 1; }
+        .content { padding: 20px; flex: 1; overflow-y: auto; }
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 13px; margin-bottom: 4px; color: #555; font-weight: 500; }
         input, textarea, select { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 14px; }
         input:focus, textarea:focus, select:focus { border-color: #2c5364; outline: none; }
+        
         button { width: 100%; padding: 13px; background: #2c5364; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 5px; }
         button:hover { background: #203a43; }
         .btn-logout { background: #6b7280; margin-top: 15px; }
@@ -30,21 +31,36 @@
         .btn-pay:hover { background: #0091ea; }
         
         .card { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 5px solid #2c5364; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .card h3 { font-size: 14px; color: #203a43; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
-        .card p { font-size: 14px; color: #4b5563; line-height: 1.4; margin-bottom: 4px; }
+        .card h3 { font-size: 14px; color: #203a43; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.3px; display: flex; align-items: center; gap: 6px; }
+        .card p { font-size: 14px; color: #4b5563; line-height: 1.5; margin-bottom: 5px; }
         .card p:last-child { margin-bottom: 0; }
         
         .hidden { display: none !important; }
-        .error { color: #dc2626; font-size: 13px; text-align: center; margin-top: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .footer { text-align: center; padding: 15px; font-size: 11px; color: #7f8c8d; background: #f8f9fa; border-top: 1px solid #e5e7eb; line-height: 1.3; }
-        .status-paid { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
-        .status-pending { color: #c62828; font-weight: bold; background: #ffebee; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .error { color: #dc2626; font-size: 13px; text-align: center; margin-top: 12px; font-weight: 600; }
+        .footer { text-align: center; padding: 15px; font-size: 11px; color: #7f8c8d; background: #f8f9fa; border-top: 1px solid #e5e7eb; line-height: 1.4; }
         
-        .student-list-container { max-height: 250px; overflow-y: auto; margin-top: 10px; }
-        .student-row { background: #fff; padding: 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #e5e7eb; font-size: 13px; }
+        /* Badges & Status */
+        .status-paid { color: #2e7d32; font-weight: bold; background: #e8f5e9; padding: 3px 8px; border-radius: 4px; font-size: 12px; display: inline-block; }
+        .status-pending { color: #c62828; font-weight: bold; background: #ffebee; padding: 3px 8px; border-radius: 4px; font-size: 12px; display: inline-block; }
+        
+        /* Attendance grid & Admin list components */
+        .attendance-badge { padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 13px; color: white; display: inline-block; }
+        .att-p { background-color: #2e7d32; }
+        .att-a { background-color: #c62828; }
+        .att-n { background-color: #6b7280; }
+        
+        .student-list-container { max-height: 280px; overflow-y: auto; margin-top: 10px; padding-right: 5px; }
+        .student-row { background: #fff; padding: 12px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #e5e7eb; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .student-row p { margin-bottom: 4px; }
-        .action-btns { display: flex; gap: 5px; margin-top: 8px; }
-        .action-btns button { width: auto; padding: 6px 10px; font-size: 12px; margin: 0; flex: 1; }
+        
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
+        .action-grid button { padding: 8px; font-size: 12px; margin: 0; }
+        .btn-delete { background: #d32f2f; grid-column: span 2; margin-top: 4px !important; }
+        .btn-delete:hover { background: #b71c1c; }
+        
+        .marks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; background: #edf2f7; padding: 10px; border-radius: 8px; text-align: center; }
+        .marks-grid div { font-size: 12px; }
+        .marks-grid span { display: block; font-weight: bold; font-size: 14px; color: #1a202c; margin-top: 2px; }
     </style>
 </head>
 <body>
@@ -52,14 +68,13 @@
 <div class="app-shell">
     <!-- Brand Header Area with Integrated Logo -->
     <div class="header">
-        <!-- Temporary URL of your logo. Change to permanent link if needed -->
         <img class="school-logo" src="https://ibb.co" alt="Rainbow Public School Logo">
         <h1 id="app-title">Rainbow Public School</h1>
         <p id="app-subtitle">Conducted by Shubhi Education Foundation</p>
     </div>
 
     <div class="content">
-        <!-- 1. ENGLISH LOGIN SCREEN -->
+        <!-- 1. LOGIN SCREEN -->
         <div id="screen-login">
             <div class="form-group">
                 <label>User ID / Admission No.</label>
@@ -73,7 +88,7 @@
             <div id="login-error" class="error"></div>
         </div>
 
-        <!-- 2. STUDENT PORTAL DASHBOARD -->
+        <!-- 2. STUDENT PORTAL DASHBOARD (Full Layout) -->
         <div id="screen-student" class="hidden">
             <div class="card">
                 <h3>👤 Student Information</h3>
@@ -82,6 +97,23 @@
                 <p><strong>Class/Course:</strong> <span id="s-class">-</span></p>
             </div>
             
+            <!-- Attendance Tracking Display -->
+            <div class="card" style="border-left-color: #4a5568;">
+                <h3>📅 Today's Attendance</h3>
+                <p>Status: <span id="s-attendance" class="attendance-badge att-n">Not Marked</span></p>
+            </div>
+
+            <!-- Exam Performance Panel -->
+            <div class="card" style="border-left-color: #4c51bf;">
+                <h3>📊 Academic Report Card</h3>
+                <div class="marks-grid">
+                    <div>Theory<span id="s-m-theory">-</span></div>
+                    <div>Practical<span id="s-m-practical">-</span></div>
+                    <div>Grade<span id="s-m-grade">-</span></div>
+                </div>
+            </div>
+
+            <!-- Razorpay Fee Management Widget -->
             <div class="card" style="border-left-color: #ff9800;">
                 <h3>💰 Monthly Fee Status</h3>
                 <p><strong>Course Fee Amount:</strong> ₹500</p>
@@ -89,6 +121,7 @@
                 <button id="rzp-button" class="btn-pay" onclick="payWithRazorpay()">💳 Pay Online via Razorpay</button>
             </div>
 
+            <!-- Live Notice Board Section -->
             <div class="card" style="border-left-color: #2e7d32;">
                 <h3>📢 Live Notice Board</h3>
                 <p id="display-notice">-</p>
@@ -96,9 +129,9 @@
             <button class="btn-logout" onclick="executeLogout()">Sign Out</button>
         </div>
 
-        <!-- 3. ADMIN PANEL SCREEN -->
+        <!-- 3. ADMIN CONTROL CENTER (Full 390+ Lines Structure) -->
         <div id="screen-admin" class="hidden">
-            <!-- Notice Dashboard Control -->
+            <!-- Global Announcement Console -->
             <div class="card" style="border-left-color: #d32f2f;">
                 <h3>📢 Update Live Notice Board</h3>
                 <div class="form-group" style="margin-top:10px;">
@@ -107,23 +140,23 @@
                 <button class="btn-admin" onclick="saveNoticeByAdmin()">Publish Notice</button>
             </div>
 
-            <!-- Student Registration Form -->
+            <!-- Enrolment Portal Form -->
             <div class="card" style="border-left-color: #2c5364;">
                 <h3>➕ Register New Student</h3>
                 <div class="form-group" style="margin-top:8px;">
-                    <input type="text" id="reg-admission" placeholder="Admission Number (e.g., RPS202652)">
+                    <input type="text" id="reg-admission" placeholder="Unique Admission Number (e.g. 52)">
                 </div>
                 <div class="form-group"><input type="text" id="reg-name" placeholder="Student Full Name"></div>
-                <div class="form-group"><input type="text" id="reg-class" placeholder="Class / Section (e.g., 10th IT)"></div>
+                <div class="form-group"><input type="text" id="reg-class" placeholder="Class/Course (e.g. 10th IT)"></div>
                 <div class="form-group"><input type="password" id="reg-pass" placeholder="Set Account Password"></div>
-                <button style="background:#2e7d32;" onclick="registerNewStudent()">Save to Database</button>
+                <button style="background:#2e7d32;" onclick="registerNewStudent()">Save Student Account</button>
             </div>
 
-            <!-- Student Management & Fee Toggle List -->
+            <!-- Student Central Directory & Control Engine -->
             <div class="card" style="border-left-color: #ff9800;">
-                <h3>👥 Registered Student Directory</h3>
+                <h3>👥 Registered Student Management</h3>
                 <div id="admin-student-list" class="student-list-container">
-                    <!-- Dynamic Rows Injected via JS -->
+                    <!-- Injected Dynamically by JS -->
                 </div>
             </div>
             <button class="btn-logout" onclick="executeLogout()">Admin Logout</button>
@@ -132,45 +165,3 @@
 
     <!-- App Branding Footer -->
     <div class="footer">
-        Shubhi Education Foundation © 2026<br>Dahod, Gujarat (Regd. NGO)
-    </div>
-</div>
-
-<script>
-    // ⚙️ IMPORTANT: Replace this with your actual Razorpay Live/Test Key ID
-    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; 
-
-    // Initial Database Simulation Setup
-    if (!localStorage.getItem('schoolNotice')) {
-        localStorage.setItem('schoolNotice', 'Welcome to Rainbow Public School Mobile Portal. New IT and Computer batches will commence from next week.');
-    }
-    
-    if (!localStorage.getItem('studentDB')) {
-        const defaultStudents = {
-            "52": { name: "Praveen Bhuriya", class: "10th IT", pass: "123456", feeStatus: "Pending" },
-            "RPS902": { name: "Komal Sangod", class: "12th Computer", pass: "456", feeStatus: "Paid" }
-        };
-        localStorage.setItem('studentDB', JSON.stringify(defaultStudents));
-    }
-
-    const ADMIN_ID = "admin";
-    const ADMIN_PASS = "admin789";
-    let loggedInStudentAdmission = "";
-
-    function executeLogin() {
-        const userVal = document.getElementById('username').value.trim();
-        const passVal = document.getElementById('password').value.trim();
-        const errorDiv = document.getElementById('login-error');
-        errorDiv.innerHTML = "";
-
-        // Admin Access Validation
-        if (userVal === ADMIN_ID && passVal === ADMIN_PASS) {
-            document.getElementById('screen-login').classList.add('hidden');
-            document.getElementById('screen-admin').classList.remove('hidden');
-            document.getElementById('app-title').innerText = "RPS Admin Terminal";
-            document.getElementById('input-notice').value = localStorage.getItem('schoolNotice');
-            loadAdminStudentList();
-            return;
-        }
-
-        // Student Access Validation via Unique Admission ID
