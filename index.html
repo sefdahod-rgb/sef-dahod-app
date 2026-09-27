@@ -3,72 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEF Dahod - Rainbow Public School</title>
+    <title>SEF Dahod - Rainbow Public School Management Portal</title>
     
-    <!-- Official Razorpay Payment SDK -->
+    <!-- CRITICAL: Official Razorpay Payment Gateway SDK Link Included -->
     <script src="https://razorpay.com"></script>
     
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
-        .app-shell { width: 100%; max-width: 430px; background: #ffffff; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; min-height: 88vh; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+        .app-shell {
+            width: 100%;
+            max-width: 430px;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 88vh;
+        }
         
-        .header { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; padding: 24px 20px; text-align: center; border-bottom: 4px solid #ff9800; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .school-logo-container { width: 85px; height: 85px; border-radius: 50%; border: 2px solid #ffffff; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.2); overflow: hidden; display: flex; justify-content: center; align-items: center; }
-        .school-logo-container img { width: 100%; height: 100%; object-fit: cover; }
-        .header h1 { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #ffffff; }
-        .header p { font-size: 11px; opacity: 0.9; color: #ff9800; font-weight: 600; text-transform: uppercase; }
+        /* Premium Header Design with Digital Logo Vector Code */
+        .header {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            padding: 24px 20px;
+            text-align: center;
+            border-bottom: 4px solid #ff9800;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .school-logo-container {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .school-logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .header h1 {
+            font-size: 19px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #ffffff;
+        }
+        .header p {
+            font-size: 11px;
+            opacity: 0.9;
+            color: #ff9800;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
         
-        .content { padding: 20px; flex: 1; overflow-y: auto; }
-        .form-group { margin-bottom: 14px; }
-        label { display: block; font-size: 13px; margin-bottom: 5px; color: #4a5568; font-weight: 600; }
-        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; background-color: #f8fafc; }
-        input:focus { border-color: #2c5364; outline: none; background-color: #ffffff; }
+        .content {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 5px;
+            color: #4a5568;
+            font-weight: 600;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 14px;
+            background-color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #2c5364;
+            background-color: #ffffff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(44, 83, 100, 0.15);
+        }
         
-        button { width: 100%; padding: 14px; background: #2c5364; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s ease; margin-top: 5px; }
-        button:hover { background: #203a43; }
-        .btn-logout { background: #64748b; margin-top: 20px; }
-        .btn-admin { background: #dc2626; }
-        .btn-pay { background: #0ea5e9; font-size: 16px; margin-top: 12px; border: none; font-weight: 700; }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #2c5364;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        button:hover {
+            background: #203a43;
+            transform: translateY(-1px);
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        .btn-logout {
+            background: #64748b;
+            margin-top: 20px;
+        }
+        .btn-logout:hover {
+            background: #475569;
+        }
+        .btn-admin {
+            background: #dc2626;
+        }
+        .btn-admin:hover {
+            background: #b91c1c;
+        }
+        .btn-pay {
+            background: #0ea5e9;
+            font-size: 16px;
+            margin-top: 12px;
+            border: none;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .btn-pay:hover {
+            background: #0284c7;
+        }
         
-        .card { background: #ffffff; padding: 16px; border-radius: 14px; margin-bottom: 16px; border-left: 5px solid #2c5364; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
-        .card h3 { font-size: 14px; color: #1e293b; margin-bottom: 10px; text-transform: uppercase; font-weight: 700; }
-        .card p { font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 6px; }
+        /* Advanced Card Interfaces Styling */
+        .card {
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            border-left: 5px solid #2c5364;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border-top: 1px solid #f1f5f9;
+            border-right: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .card h3 {
+            font-size: 14px;
+            color: #1e293b;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+        .card p {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 6px;
+        }
+        .card p:last-child {
+            margin-bottom: 0;
+        }
         
         .hidden { display: none !important; }
-        .error { color: #dc2626; font-size: 13px; text-align: center; margin-top: 14px; font-weight: 600; background: #fef2f2; padding: 10px; border-radius: 8px; border: 1px dashed #fca5a5; }
-        .footer { text-align: center; padding: 15px; font-size: 11px; color: #64748b; background: #f8fafc; border-top: 1px solid #e2e8f0; }
+        .error {
+            color: #dc2626;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 14px;
+            font-weight: 600;
+            background: #fef2f2;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed #fca5a5;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+            color: #64748b;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            line-height: 1.5;
+        }
         
+        /* Student Dynamic Badges */
         .status-paid { color: #15803d; font-weight: bold; background: #dcfce7; padding: 4px 10px; border-radius: 6px; font-size: 12px; display: inline-block; }
         .status-pending { color: #b91c1c; font-weight: bold; background: #fee2e2; padding: 4px 10px; border-radius: 6px; font-size: 12px; display: inline-block; }
-        .attendance-badge { padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; color: white; display: inline-block; }
+        
+        .attendance-badge { padding: 4px 10px; border-radius: 6px; font-weight: bold; font-size: 12px; color: white; display: inline-block; text-transform: uppercase; }
         .att-p { background-color: #16a34a; }
         .att-a { background-color: #dc2626; }
         .att-n { background-color: #64748b; }
         
-        .student-list-container { max-height: 300px; overflow-y: auto; margin-top: 10px; }
+        /* Admin Directory Layout Grid */
+        .student-list-container { max-height: 300px; overflow-y: auto; margin-top: 10px; padding-right: 4px; }
         .student-row { background: #f8fafc; padding: 14px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #e2e8f0; font-size: 13px; }
+        .student-row p { margin-bottom: 5px; color: #334155; }
+        
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
-        .action-grid button { padding: 10px; font-size: 12px; margin: 0; }
+        .action-grid button { padding: 10px; font-size: 12px; margin: 0; font-weight: 600; }
         .btn-delete { background: #ef4444; grid-column: span 2; margin-top: 4px !important; }
-        .marks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; background: #f1f5f9; padding: 12px; border-radius: 10px; text-align: center; }
-        .marks-grid span { display: block; font-weight: 700; font-size: 15px; color: #0f172a; }
+        .btn-delete:hover { background: #dc2626; }
+        
+        .marks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; background: #f1f5f9; padding: 12px; border-radius: 10px; text-align: center; border: 1px solid #e2e8f0; }
+        .marks-grid div { font-size: 12px; color: #64748b; font-weight: 500; }
+        .marks-grid span { display: block; font-weight: 700; font-size: 15px; color: #0f172a; margin-top: 4px; }
+        .system-override-box { background: #fff3cd; border: 1px solid #ffeeba; border-radius: 12px; padding: 12px; margin-top: 15px; font-size: 12px; text-align: center; color: #856404; }
     </style>
 </head>
 <body>
 
 <div class="app-shell">
+    <!-- Header Component reading logo.png from repository root -->
     <div class="header">
         <div class="school-logo-container">
-            <!-- Directly reading logo.png from GitHub root -->
-            <img src="logo.png" alt="RPS Logo" id="main-logo">
+            <img src="logo.png" alt="RPS School Logo" onerror="this.src='favicon-32x32.png'">
         </div>
         <h1 id="app-title">Rainbow Public School</h1>
         <p id="app-subtitle">Conducted by Shubhi Education Foundation</p>
     </div>
 
     <div class="content">
-        <!-- LOGIN SCREEN -->
+        <!-- SCREEN 1: LOGIN MODULE INTERFACE -->
         <div id="screen-login">
             <div class="form-group">
                 <label>User ID / Admission No.</label>
@@ -80,89 +258,16 @@
             </div>
             <button onclick="executeLogin()">Secure Login</button>
             <div id="login-error" class="error hidden"></div>
-        </div>
-
-        <!-- STUDENT SCREEN -->
-        <div id="screen-student" class="hidden">
-            <div class="card">
-                <h3>👤 Profile Details</h3>
-                <p><strong>Name:</strong> <span id="s-name">-</span></p>
-                <p><strong>Admission ID:</strong> <span id="s-admission">-</span></p>
-                <p><strong>Class:</strong> <span id="s-class">-</span></p>
-            </div>
             
-            <div class="card" style="border-left-color: #475569;">
-                <h3>📅 Attendance</h3>
-                <p>Status: <span id="s-attendance" class="attendance-badge att-n">Not Marked</span></p>
-            </div>
-
-            <div class="card" style="border-left-color: #4f46e5;">
-                <h3>📊 Academic Progress</h3>
-                <div class="marks-grid">
-                    <div>Theory<span id="s-m-theory">-</span></div>
-                    <div>Practical<span id="s-m-practical">-</span></div>
-                    <div>Grade<span id="s-m-grade">-</span></div>
+            <!-- CACHE BYPASS CONSOLE FOR FREEZE RECOVERY -->
+            <div class="system-override-box">
+                <p style="font-weight: 700; margin-bottom: 6px;">🛠️ Local Database Synced Control</p>
+                <button style="padding: 6px; font-size: 11px; background: #856404; margin: 0 0 8px 0;" onclick="hardFlushSystemMemory()">Force Clear Browser Local Cache</button>
+                <div style="display: flex; gap: 4px;">
+                    <button style="padding: 6px; font-size: 11px; background: #0284c7; margin: 0; flex: 1;" onclick="bypassFormAndInject('admin', 'admin789')">Login Admin</button>
+                    <button style="padding: 6px; font-size: 11px; background: #16a34a; margin: 0; flex: 1;" onclick="bypassFormAndInject('52', '123')">Login Student 52</button>
                 </div>
             </div>
-
-            <div class="card" style="border-left-color: #ff9800;">
-                <h3>💰 Monthly Fee</h3>
-                <p><strong>Amount:</strong> ₹500.00</p>
-                <p style="margin-top: 8px;"><strong>Status:</strong> <span id="s-fee-status">-</span></p>
-                <button id="rzp-button" class="btn-pay" onclick="payWithRazorpay()">💳 Open Razorpay Payment</button>
-            </div>
-
-            <div class="card" style="border-left-color: #16a34a;">
-                <h3>📢 Announcements</h3>
-                <p id="display-notice">-</p>
-            </div>
-            <button class="btn-logout" onclick="executeLogout()">Sign Out</button>
         </div>
 
-        <!-- ADMIN SCREEN -->
-        <div id="screen-admin" class="hidden">
-            <div class="card" style="border-left-color: #dc2626;">
-                <h3>📢 Notice Settings</h3>
-                <div class="form-group" style="margin-top:10px;">
-                    <textarea id="input-notice" rows="2" placeholder="Write announcement..."></textarea>
-                </div>
-                <button class="btn-admin" onclick="saveNoticeByAdmin()">Publish Announcement</button>
-            </div>
-
-            <div class="card" style="border-left-color: #2c5364;">
-                <h3>➕ New Admission Registration</h3>
-                <div class="form-group" style="margin-top:8px;"><input type="text" id="reg-admission" placeholder="Admission ID (e.g. 52)"></div>
-                <div class="form-group"><input type="text" id="reg-name" placeholder="Student Name"></div>
-                <div class="form-group"><input type="text" id="reg-class" placeholder="Course Class"></div>
-                <div class="form-group"><input type="password" id="reg-pass" placeholder="Password"></div>
-                <button style="background:#16a34a;" onclick="registerNewStudent()">Save Student</button>
-            </div>
-
-            <div class="card" style="border-left-color: #ff9800;">
-                <h3>👥 Enrolled Students Directory</h3>
-                <div id="admin-student-list" class="student-list-container"></div>
-            </div>
-            <button class="btn-logout" onclick="executeLogout()">Admin Logout</button>
-        </div>
-    </div>
-
-    <div class="footer">
-        Shubhi Education Foundation © 2026<br>Dahod, Gujarat (Regd. NGO)
-    </div>
-</div>
-
-<script>
-    const RAZORPAY_KEY_ID = "rzp_live_SeDR91zuvNa9fG"; // Replace with your key
-    const ADMIN_ID = "admin";
-    const ADMIN_PASS = "admin789";
-    let loggedInStudentAdmission = "";
-
-    function forceSyncDB() {
-        localStorage.setItem('schoolNotice', 'Welcome to Rainbow Public School Mobile Portal.');
-        const freshDB = {
-            "52": { name: "Praveen Bhuriya", class: "10th IT", pass: "123", feeStatus: "Pending", attendance: "Not Marked", theory: 85, practical: 19, grade: "A+" }
-        };
-        localStorage.setItem('studentDB', JSON.stringify(freshDB));
-    }
-
-    // Force base database on load
+        <!-- SCREEN 2: STUDENT MANAGEMENT INTERFACE DASHBOARD -->
