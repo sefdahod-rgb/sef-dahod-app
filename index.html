@@ -9,23 +9,22 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
         body { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
-        .app-shell { width: 100%; max-width: 430px; background: #ffffff; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; min-height: 88vh; }
+        .app-shell { width: 100%; max-width: 430px; background: #ffffff; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; min-height: 85vh; }
         .header { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; padding: 24px 20px; text-align: center; border-bottom: 4px solid #ff9800; display: flex; flex-direction: column; align-items: center; gap: 10px; }
         .school-logo-container { width: 85px; height: 85px; border-radius: 50%; border: 2px solid #ffffff; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.2); overflow: hidden; display: flex; justify-content: center; align-items: center; }
         .school-logo-container img { width: 100%; height: 100%; object-fit: cover; }
-        .header h1 { font-size: 19px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #ffffff; }
+        .header h1 { font-size: 19px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         .header p { font-size: 11px; opacity: 0.9; color: #ff9800; font-weight: 600; text-transform: uppercase; }
-        .content { padding: 20px; flex: 1; overflow-y: auto; }
+        .content { padding: 20px; flex: 1; }
         .form-group { margin-bottom: 14px; }
         label { display: block; font-size: 13px; margin-bottom: 5px; color: #4a5568; font-weight: 600; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; background-color: #f8fafc; }
-        input:focus, textarea:focus { border-color: #2c5364; background-color: #ffffff; outline: none; }
-        button { width: 100%; padding: 14px; background: #2c5364; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s ease; margin-top: 5px; }
+        button { width: 100%; padding: 14px; background: #2c5364; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 5px; }
         button:hover { background: #203a43; }
         .btn-logout { background: #64748b; margin-top: 20px; }
         .btn-admin { background: #dc2626; }
-        .btn-pay { background: #0ea5e9; font-size: 16px; margin-top: 12px; border: none; font-weight: 700; }
-        .card { background: #ffffff; padding: 16px; border-radius: 14px; margin-bottom: 16px; border: 1px solid #f1f5f9; border-left: 5px solid #2c5364; }
+        .btn-pay { background: #0ea5e9; font-size: 16px; margin-top: 12px; font-weight: 700; }
+        .card { background: #ffffff; padding: 16px; border-radius: 14px; margin-bottom: 16px; border-left: 5px solid #2c5364; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; }
         .card h3 { font-size: 14px; color: #1e293b; margin-bottom: 10px; text-transform: uppercase; font-weight: 700; }
         .card p { font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 6px; }
         .hidden { display: none !important; }
@@ -37,10 +36,10 @@
         .att-p { background-color: #16a34a; }
         .att-a { background-color: #dc2626; }
         .att-n { background-color: #64748b; }
-        .student-list-container { max-height: 300px; overflow-y: auto; margin-top: 10px; }
+        .student-list-container { max-height: 250px; overflow-y: auto; margin-top: 10px; }
         .student-row { background: #f8fafc; padding: 14px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #e2e8f0; font-size: 13px; }
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
-        .action-grid button { padding: 10px; font-size: 12px; margin: 0; }
+        .action-grid button { padding: 8px; font-size: 11px; margin: 0; }
         .btn-delete { background: #ef4444; grid-column: span 2; margin-top: 4px !important; }
         .marks-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; background: #f1f5f9; padding: 12px; border-radius: 10px; text-align: center; }
         .marks-grid span { display: block; font-weight: 700; font-size: 15px; color: #0f172a; }
@@ -54,6 +53,7 @@
         <h1>Rainbow Public School</h1>
         <p>Conducted by Shubhi Education Foundation</p>
     </div>
+    
     <div class="content">
         <!-- 1. LOGIN SCREEN -->
         <div id="screen-login">
@@ -65,18 +65,20 @@
                 <label>Security Password</label>
                 <input type="password" id="password" placeholder="••••••••">
             </div>
-            <button onclick="window.executeLogin()">Secure Login</button>
+            <button onclick="executeLogin()">Secure Login</button>
             <div id="login-error" class="error hidden"></div>
+            
             <div class="override-console">
                 <p style="font-weight: 700; margin-bottom: 6px;">🛠️ Cache Sync Console</p>
-                <button style="padding: 6px; font-size: 11px; background: #856404; margin-bottom: 8px;" onclick="window.flushSystemCache()">Force Clear Browser Local Cache</button>
+                <button style="padding: 6px; font-size: 11px; background: #856404; margin-bottom: 8px;" onclick="flushSystemCache()">Force Clear Browser Local Cache</button>
                 <div style="display: flex; gap: 4px;">
-                    <button style="padding: 6px; font-size: 11px; background: #0284c7; margin: 0; flex: 1;" onclick="window.quickLinkBypass('admin', 'admin789')">Login Admin</button>
-                    <button style="padding: 6px; font-size: 11px; background: #16a34a; margin: 0; flex: 1;" onclick="window.quickLinkBypass('52', '123')">Login Student 52</button>
+                    <button style="padding: 6px; font-size: 11px; background: #0284c7; margin: 0; flex: 1;" onclick="quickLinkBypass('admin', 'admin789')">Login Admin</button>
+                    <button style="padding: 6px; font-size: 11px; background: #16a34a; margin: 0; flex: 1;" onclick="quickLinkBypass('52', '123')">Login Student 52</button>
                 </div>
             </div>
         </div>
-        <!-- 2. STUDENT SCREEN -->
+
+        <!-- 2. STUDENT VIEW PORTAL -->
         <div id="screen-student" class="hidden">
             <div class="card">
                 <h3>👤 Profile Directory</h3>
@@ -100,22 +102,23 @@
                 <h3>💰 Account Financials & Fees</h3>
                 <p><strong>Billed Fee Value:</strong> ₹500.00</p>
                 <p style="margin-top: 8px;"><strong>Payment Status:</strong> <span id="s-fee-status">-</span></p>
-                <button id="rzp-button" class="btn-pay" onclick="window.payWithRazorpay()"> 💳 Initialize Razorpay Secure Checkout</button>
+                <button id="rzp-button" class="btn-pay" onclick="payWithRazorpay()"> 💳 Initialize Razorpay Secure Checkout</button>
             </div>
             <div class="card" style="border-left-color: #16a34a;">
                 <h3>📢 Institutional Notifications</h3>
                 <p id="display-notice">-</p>
             </div>
-            <button class="btn-logout" onclick="window.executeLogout()">Secure Session Signout</button>
+            <button class="btn-logout" onclick="executeLogout()">Secure Session Signout</button>
         </div>
-        <!-- 3. ADMIN SCREEN -->
+
+        <!-- 3. ADMIN MANAGEMENT SCREEN -->
         <div id="screen-admin" class="hidden">
             <div class="card" style="border-left-color: #dc2626;">
                 <h3>📢 Global Broadcast Configuration</h3>
                 <div class="form-group" style="margin-top:10px;">
                     <textarea id="input-notice" rows="2" placeholder="Write new notice updates here..."></textarea>
                 </div>
-                <button class="btn-admin" onclick="window.saveNoticeByAdmin()">Broadcast Notice System</button>
+                <button class="btn-admin" onclick="saveNoticeByAdmin()">Broadcast Notice System</button>
             </div>
             <div class="card" style="border-left-color: #2c5364;">
                 <h3>➕ Enroll & Register Student Account</h3>
@@ -123,9 +126,10 @@
                 <div class="form-group"><input type="text" id="reg-name" placeholder="Student Complete Full Name"></div>
                 <div class="form-group"><input type="text" id="reg-class" placeholder="Class Level"></div>
                 <div class="form-group"><input type="password" id="reg-pass" placeholder="Password"></div>
-                <button style="background:#16a34a;" onclick="window.registerNewStudent()">Commit Account Record</button>
+                <button style="background:#16a34a;" onclick="registerNewStudent()">Commit Account Record</button>
             </div>
             <div class="card" style="border-left-color: #ff9800;">
                 <h3>👥 Registered Central Student Records</h3>
                 <div id="admin-student-list" class="student-list-container"></div>
             </div>
+            <button class="btn-logout" onclick="executeLogout()">Terminate Admin Session</button>
