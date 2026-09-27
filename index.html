@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SEF Dahod - Rainbow Public School</title>
     
-    <!-- PWA Manifest Link -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    
     <!-- Official Razorpay Payment SDK -->
     <script src="https://razorpay.com"></script>
     
@@ -17,7 +13,6 @@
         body { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
         .app-shell { width: 100%; max-width: 430px; background: #ffffff; border-radius: 24px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; min-height: 88vh; }
         
-        /* Fixed Branding Header linking your logo.png */
         .header { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; padding: 24px 20px; text-align: center; border-bottom: 4px solid #ff9800; display: flex; flex-direction: column; align-items: center; gap: 10px; }
         .school-logo-container { width: 85px; height: 85px; border-radius: 50%; border: 2px solid #ffffff; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.2); overflow: hidden; display: flex; justify-content: center; align-items: center; }
         .school-logo-container img { width: 100%; height: 100%; object-fit: cover; }
@@ -28,7 +23,7 @@
         .form-group { margin-bottom: 14px; }
         label { display: block; font-size: 13px; margin-bottom: 5px; color: #4a5568; font-weight: 600; }
         input, textarea, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; background-color: #f8fafc; }
-        input:focus, textarea:focus { border-color: #2c5364; outline: none; background-color: #ffffff; }
+        input:focus { border-color: #2c5364; outline: none; background-color: #ffffff; }
         
         button { width: 100%; padding: 14px; background: #2c5364; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s ease; margin-top: 5px; }
         button:hover { background: #203a43; }
@@ -65,15 +60,15 @@
 <div class="app-shell">
     <div class="header">
         <div class="school-logo-container">
-            <!-- Directly linking the logo.png from your repository root -->
-            <img src="logo.png" alt="Rainbow Public School Logo" onerror="this.src='favicon-48x48.png'">
+            <!-- Directly reading logo.png from GitHub root -->
+            <img src="logo.png" alt="RPS Logo" id="main-logo">
         </div>
         <h1 id="app-title">Rainbow Public School</h1>
         <p id="app-subtitle">Conducted by Shubhi Education Foundation</p>
     </div>
 
     <div class="content">
-        <!-- LOGIN MODULE -->
+        <!-- LOGIN SCREEN -->
         <div id="screen-login">
             <div class="form-group">
                 <label>User ID / Admission No.</label>
@@ -87,7 +82,7 @@
             <div id="login-error" class="error hidden"></div>
         </div>
 
-        <!-- STUDENT MODULE -->
+        <!-- STUDENT SCREEN -->
         <div id="screen-student" class="hidden">
             <div class="card">
                 <h3>👤 Profile Details</h3>
@@ -97,12 +92,12 @@
             </div>
             
             <div class="card" style="border-left-color: #475569;">
-                <h3>📅 Attendance Record</h3>
-                <p>Today: <span id="s-attendance" class="attendance-badge att-n">Not Marked</span></p>
+                <h3>📅 Attendance</h3>
+                <p>Status: <span id="s-attendance" class="attendance-badge att-n">Not Marked</span></p>
             </div>
 
             <div class="card" style="border-left-color: #4f46e5;">
-                <h3>📊 Scorecard</h3>
+                <h3>📊 Academic Progress</h3>
                 <div class="marks-grid">
                     <div>Theory<span id="s-m-theory">-</span></div>
                     <div>Practical<span id="s-m-practical">-</span></div>
@@ -111,43 +106,43 @@
             </div>
 
             <div class="card" style="border-left-color: #ff9800;">
-                <h3>💰 Razorpay Fees</h3>
+                <h3>💰 Monthly Fee</h3>
                 <p><strong>Amount:</strong> ₹500.00</p>
                 <p style="margin-top: 8px;"><strong>Status:</strong> <span id="s-fee-status">-</span></p>
-                <button id="rzp-button" class="btn-pay" onclick="payWithRazorpay()">💳 Open Razorpay Checkout</button>
+                <button id="rzp-button" class="btn-pay" onclick="payWithRazorpay()">💳 Open Razorpay Payment</button>
             </div>
 
             <div class="card" style="border-left-color: #16a34a;">
-                <h3>📢 Notice Board</h3>
+                <h3>📢 Announcements</h3>
                 <p id="display-notice">-</p>
             </div>
-            <button class="btn-logout" onclick="executeLogout()">Signout Session</button>
+            <button class="btn-logout" onclick="executeLogout()">Sign Out</button>
         </div>
 
-        <!-- ADMIN MODULE -->
+        <!-- ADMIN SCREEN -->
         <div id="screen-admin" class="hidden">
             <div class="card" style="border-left-color: #dc2626;">
-                <h3>📢 Notice Broadcast</h3>
+                <h3>📢 Notice Settings</h3>
                 <div class="form-group" style="margin-top:10px;">
-                    <textarea id="input-notice" rows="2" placeholder="Write new update..."></textarea>
+                    <textarea id="input-notice" rows="2" placeholder="Write announcement..."></textarea>
                 </div>
-                <button class="btn-admin" onclick="saveNoticeByAdmin()">Broadcast Notice</button>
+                <button class="btn-admin" onclick="saveNoticeByAdmin()">Publish Announcement</button>
             </div>
 
             <div class="card" style="border-left-color: #2c5364;">
-                <h3>➕ Register New Student</h3>
+                <h3>➕ New Admission Registration</h3>
                 <div class="form-group" style="margin-top:8px;"><input type="text" id="reg-admission" placeholder="Admission ID (e.g. 52)"></div>
-                <div class="form-group"><input type="text" id="reg-name" placeholder="Student Full Name"></div>
-                <div class="form-group"><input type="text" id="reg-class" placeholder="Class Level"></div>
+                <div class="form-group"><input type="text" id="reg-name" placeholder="Student Name"></div>
+                <div class="form-group"><input type="text" id="reg-class" placeholder="Course Class"></div>
                 <div class="form-group"><input type="password" id="reg-pass" placeholder="Password"></div>
                 <button style="background:#16a34a;" onclick="registerNewStudent()">Save Student</button>
             </div>
 
             <div class="card" style="border-left-color: #ff9800;">
-                <h3>👥 Registered Directory</h3>
+                <h3>👥 Enrolled Students Directory</h3>
                 <div id="admin-student-list" class="student-list-container"></div>
             </div>
-            <button class="btn-logout" onclick="executeLogout()">Logout Admin</button>
+            <button class="btn-logout" onclick="executeLogout()">Admin Logout</button>
         </div>
     </div>
 
@@ -157,11 +152,17 @@
 </div>
 
 <script>
-    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; // Insert Razorpay Key here
+    const RAZORPAY_KEY_ID = "rzp_test_YOUR_KEY_HERE"; // Replace with your key
     const ADMIN_ID = "admin";
     const ADMIN_PASS = "admin789";
     let loggedInStudentAdmission = "";
 
-    function setupDatabaseEngine() {
-        localStorage.setItem('schoolNotice', 'Welcome to Rainbow Public School Application Portal.');
-        const masterSeedRecord = {
+    function forceSyncDB() {
+        localStorage.setItem('schoolNotice', 'Welcome to Rainbow Public School Mobile Portal.');
+        const freshDB = {
+            "52": { name: "Praveen Bhuriya", class: "10th IT", pass: "123", feeStatus: "Pending", attendance: "Not Marked", theory: 85, practical: 19, grade: "A+" }
+        };
+        localStorage.setItem('studentDB', JSON.stringify(freshDB));
+    }
+
+    // Force base database on load
