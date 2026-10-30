@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101d36">
+<title>Rainbow Public School | Teacher App</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+ font-family:Arial, sans-serif;
+ background:linear-gradient(145deg,#101d36,#172c4d);
+ min-height:100vh;display:flex;align-items:center;
+ justify-content:center;padding:20px;color:#17243b
+}
+.container{width:100%;max-width:430px}
+.brand{text-align:center;color:white;margin-bottom:25px}
+.logo{
+ width:76px;height:76px;border-radius:22px;
+ background:linear-gradient(135deg,#f5d47a,#c99a35);
+ display:flex;align-items:center;justify-content:center;
+ margin:0 auto 14px;font-size:34px;font-weight:bold;
+ color:#14213a;box-shadow:0 8px 25px #0005
+}
+.brand h1{font-size:23px;letter-spacing:.5px}
+.brand p{font-size:12px;color:#d5ddeb;margin-top:7px}
+.card{
+ background:#fff;border-radius:22px;padding:28px 24px;
+ box-shadow:0 20px 55px #0005
+}
+.tag{
+ display:inline-block;background:#fff5dc;color:#9a701d;
+ font-size:11px;font-weight:bold;padding:7px 12px;
+ border-radius:20px;margin-bottom:15px
+}
+.card h2{font-size:24px;color:#17243b;margin-bottom:7px}
+.sub{font-size:13px;color:#778397;margin-bottom:25px}
+label{display:block;font-size:13px;font-weight:bold;margin:16px 0 8px}
+input{
+ width:100%;padding:14px;border:1px solid #dce2eb;
+ border-radius:11px;font-size:15px;outline:none
+}
+input:focus{border-color:#c69a3c;box-shadow:0 0 0 3px #c69a3c20}
+button{
+ width:100%;border:0;border-radius:11px;padding:15px;
+ margin-top:23px;background:linear-gradient(100deg,#d8b45c,#bd8b29);
+ color:#17243b;font-size:15px;font-weight:bold;cursor:pointer
+}
+button:hover{filter:brightness(1.05)}
+.note{font-size:11px;color:#8993a3;text-align:center;margin-top:18px;line-height:1.6}
+.footer{text-align:center;color:#c8d1df;font-size:11px;margin-top:22px;line-height:1.8}
+.footer strong{color:#f0ce78}
+#message{font-size:12px;color:#b33;margin-top:12px;text-align:center}
+</style>
+</head>
+<body>
+<div class="container">
+ <div class="brand">
+  <div class="logo">R</div>
+  <h1>RAINBOW PUBLIC SCHOOL</h1>
+  <p>Conducted by Shubhi Education Foundation, Dahod</p>
+ </div>
+
+ <div class="card">
+  <span class="tag">TEACHER PORTAL</span>
+  <h2>Welcome Back!</h2>
+  <p class="sub">Sign in to access your teacher dashboard.</p>
+
+  <form id="loginForm">
+   <label for="username">Teacher Username</label>
+   <input id="username" type="text" placeholder="Enter your username" autocomplete="username" required>
+
+   <label for="password">Password</label>
+   <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+
+   <button type="submit">Sign In →</button>
+   <div id="message"></div>
+  </form>
+
+  <p class="note">Secure access for authorised school teachers only.<br>For login assistance, contact the school administration.</p>
+ </div>
+
+ <div class="footer">
+  <strong>RAINBOW PUBLIC SCHOOL</strong><br>
+  Dahod, Gujarat – 389151<br>
+  02673-450037 | 9408695001<br>
+  www.sefdahod.in
+ </div>
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit",function(e){
+ e.preventDefault();
+ document.getElementById("message").textContent =
+ "Login authentication will be connected securely in the next step.";
+});
+</script>
+</body>
+</html>
